@@ -13,6 +13,7 @@ from .actions import (
     FindFile,
     GitClone,
     GitPatch,
+    GitPush,
     GitRepoTree,
     ListFiles,
     OpenFile,
@@ -45,4 +46,5 @@ class Filetool(LocalTool, autoload=True):
             GitClone,
             GitRepoTree,
             GitPatch,
+            GitPush,
         ]

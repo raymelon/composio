@@ -387,7 +387,7 @@ class FileManager(Sessionable):
         """Get the current working directory."""
         return str(self.working_dir)
 
-    def execute_command(self, command: str) -> t.Tuple[str, t.Optional[str]]:
+    def execute_command(self, command: str, env: t.Optional[t.Dict[str, str]] = None) -> t.Tuple[str, t.Optional[str]]:
         """Execute a command in the current working directory."""
         try:
             result = subprocess.run(
@@ -398,6 +398,7 @@ class FileManager(Sessionable):
                 text=True,
                 timeout=360,
                 cwd=self.working_dir,
+                env=env,
             )
             return result.stdout, None
         except subprocess.CalledProcessError as e:

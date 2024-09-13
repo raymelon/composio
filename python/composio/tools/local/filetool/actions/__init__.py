@@ -5,6 +5,7 @@ from .edit import EditFile
 from .find import FindFile
 from .git_clone import GitClone
 from .git_patch import GitPatch
+from .git_push import GitPush
 from .git_repo_tree import GitRepoTree
 from .grep import SearchWord
 from .list import ListFiles
