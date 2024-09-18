@@ -61,7 +61,7 @@ def _base(generated: Path, multi: bool = False) -> None:
         futures = []
         for file in base.iterdir():
             _, tag = file.name.split(".", maxsplit=1)
-            if "3.5" in tag:
+            if "3.5" in tag or "3.6" in tag or "3.7" in tag:
                 continue
             futures.append(executor.submit(_build, file, tag, multi))
         _ = [fut.result() for fut in futures]
@@ -80,6 +80,8 @@ def _swes(generated: Path, multi: bool = False) -> None:
             repo = child.name.replace("__", "-")
             for version in child.iterdir():
                 tag = f"{repo}-{version.name.replace('.', '-')}"
+                if "django" not in repo:
+                    continue
                 futures.append(
                     executor.submit(
                         _build,
