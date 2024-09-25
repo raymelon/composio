@@ -8,9 +8,9 @@ import dotenv
 from langchain_aws import BedrockChat
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, ToolMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import ToolNode
-from langchain_openai import ChatOpenAI
 from prompts import CODE_ANALYZER_PROMPT, EDITING_AGENT_PROMPT, SOFTWARE_ENGINEER_PROMPT
 
 from composio_langgraph import Action, App, ComposioToolSet, WorkspaceType
@@ -35,9 +35,9 @@ def pop_thought_from_request(request: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
 
 
 def get_agent_graph(repo_name: str, workspace_id: str, test_command: str):
+    import os
     import random
     import string
-    import os
 
     random_string = "".join(random.choices(string.digits, k=6))
 
