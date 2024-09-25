@@ -10,6 +10,7 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, ToolMe
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import ToolNode
+from langchain_openai import ChatOpenAI
 from prompts import CODE_ANALYZER_PROMPT, EDITING_AGENT_PROMPT, SOFTWARE_ENGINEER_PROMPT
 
 from composio_langgraph import Action, App, ComposioToolSet, WorkspaceType
@@ -36,6 +37,7 @@ def pop_thought_from_request(request: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
 def get_agent_graph(repo_name: str, workspace_id: str, test_command: str):
     import random
     import string
+    import os
 
     random_string = "".join(random.choices(string.digits, k=6))
 
@@ -45,12 +47,21 @@ def get_agent_graph(repo_name: str, workspace_id: str, test_command: str):
 
         return response
 
-    bedrock_client = BedrockChat(
-        credentials_profile_name="default",
-        model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
-        region_name="us-west-2",
-        model_kwargs={"temperature": 0, "max_tokens": 8192},
-    )
+    model = os.environ["MODEL"]
+    if model == "claude-3-5":
+        client = BedrockChat(
+            credentials_profile_name="default",
+            model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
+            region_name="us-west-2",
+            model_kwargs={"temperature": 0, "max_tokens": 8192},
+        )
+    else:
+        client = ChatOpenAI(
+            model="gpt-4-1106-preview",
+            temperature=0,
+            max_tokens=4096,
+            api_key=os.environ["OPENAI_API_KEY"],
+        )
 
     composio_toolset = ComposioToolSet(
         workspace_config=WorkspaceType.Docker(),
@@ -193,7 +204,7 @@ def get_agent_graph(repo_name: str, workspace_id: str, test_command: str):
                 MessagesPlaceholder(variable_name="messages"),
             ]
         )
-        llm = bedrock_client
+        llm = client
         if tools:
             # return prompt | llm.bind_tools(tools)
             return prompt | llm.bind_tools(tools)
@@ -222,6 +233,7 @@ def get_agent_graph(repo_name: str, workspace_id: str, test_command: str):
         "continue",
         "analyze_code",
         "edit_file",
+        "swe_tool",
     ]:
         messages = state["messages"]
         for message in reversed(messages):

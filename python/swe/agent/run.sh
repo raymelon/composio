@@ -1,5 +1,7 @@
 #! /bin/bash
 
+model="gpt-4" # change to MODEL="claude-3-5" to use claude 3.5 sonnet
+
 instances_unresolved=(
 "django__django-13933"
 "django__django-14053"
@@ -66,7 +68,7 @@ instances_string=$(IFS=,; echo "${instances[*]}")
 run_instance() {
     local instance=$1
     local run_id=$2
-    LANGCHAIN_PROJECT=$instance python benchmark.py --test-instance-ids $instance --run-id $run_id
+    LANGCHAIN_PROJECT=$instance MODEL=$model python benchmark.py --test-instance-ids $instance --run-id $run_id
 }
 
 # Set the number of instances to run in parallel
