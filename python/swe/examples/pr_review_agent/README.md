@@ -1,0 +1,1 @@
+<img src="https://img.devrant.com/devrant/rant/r_154480_wNWJE.jpg" width="100%"/>
