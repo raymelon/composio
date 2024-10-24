@@ -39,6 +39,7 @@ class RealtimeAgent:
         self.tools = composio_toolset.get_realtime_tools(
             actions=[
                 Action.GMAIL_SEND_EMAIL,
+                Action.GMAIL_FETCH_EMAILS,
                 Action.SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL,
                 Action.GMAIL_CREATE_EMAIL_DRAFT,
             ]
@@ -131,6 +132,7 @@ class RealtimeAgent:
                             "instructions": (
                                 "You are an AI assistant that helps the user manage emails and Slack messages. "
                                 "When a new message arrives, you should inform the user by reading it out loud. "
+                                "Avoid reading the user ID. They are not important. Example of userid: U056ZFA33QD."
                                 "If the user wants to respond, you should collect their response and use the appropriate function "
                                 "to send their message back to Slack or Gmail. "
                                 "You have access to the following functions: 'SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL', 'GMAIL_SEND_EMAIL', 'GMAIL_CREATE_EMAIL_DRAFT'. "
@@ -369,6 +371,7 @@ class RealtimeAgent:
                         "tools": self.tools,
                         "instructions": (
                             "You are an AI assistant that helps the user manage emails and Slack messages. "
+                            "Your name is Siri. So the user will call you Siri sometimes. You should respond to that."
                             "When a new message arrives, you should inform the user by reading it out loud. "
                             "If the user wants to respond, you should collect their response and use the appropriate function "
                             "to send their message back to Slack or Gmail. "
@@ -469,6 +472,7 @@ def handle_gmail_message(event: TriggerEventData):
     asyncio.run(agent.handle_event(context))
 
 def get_slack_channel_name(channel_id):
+    return 'product'
     response = composio_toolset.execute_action(action=Action.SLACK_LIST_ALL_SLACK_TEAM_CHANNELS_WITH_VARIOUS_FILTERS, params={"limit": 1000})
     if response.get('data', {}).get('ok'):
         channels = response['data'].get('channels', [])
@@ -478,6 +482,8 @@ def get_slack_channel_name(channel_id):
     return channel_id
 
 def get_slack_user_name(user_id):
+    time.sleep(1)
+    return 'soham'
     response = composio_toolset.execute_action(action=Action.SLACK_RETRIEVE_DETAILED_USER_INFORMATION, params={"user": user_id})
     if response.get('data', {}).get('ok'):
         return response['data'].get('user', {}).get('real_name')
