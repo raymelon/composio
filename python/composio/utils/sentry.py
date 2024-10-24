@@ -66,19 +66,22 @@ def init():
 
     if sentry_config.get("dsn") is None:
         return
-
-    sentry_sdk.init(
-        dsn=sentry_config["dsn"],
-        traces_sample_rate=sentry_config.get("traces_sample_rate", 1.0),
-        profiles_sample_rate=sentry_config.get("profiles_sample_rate", 1.0),
-        debug=False,
-        before_send=filter_sentry_errors,
-        integrations=[
-            sentry_sdk.integrations.atexit.AtexitIntegration(
-                callback=lambda x, y: None
-            )  # suppress atexit message
-        ],
-    )
+    
+    try:
+        sentry_sdk.init(
+            dsn=sentry_config["dsn"],
+            traces_sample_rate=sentry_config.get("traces_sample_rate", 1.0),
+            profiles_sample_rate=sentry_config.get("profiles_sample_rate", 1.0),
+            debug=False,
+            before_send=filter_sentry_errors,
+            integrations=[
+                sentry_sdk.integrations.atexit.AtexitIntegration(
+                    callback=lambda x, y: None
+                )  # suppress atexit message
+            ],
+        )
+    except Exception as e:
+        print(f"Error initializing Sentry: {e}")
 
 
 @atexit.register
