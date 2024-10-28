@@ -15,11 +15,12 @@ import dotenv
 from tenacity import retry, stop_after_attempt, wait_exponential
 import typing as t
 import operator
-from agent.tools import pr_get_diff, pr_get_metadata
-from agent.prompts import SYSTEM_LANGGRAPH as SYSTEM
-from agent.prompts import REPO_ANALYZER_PROMPT
+from agent.tools import get_pr_diff, get_pr_metadata
+from agent.prompts import PR_FETCHER_PROMPT, PR_COMMENT_PROMPT, REPO_ANALYZER_PROMPT
 
 dotenv.load_dotenv()
+
+MODEL = "claude"
 
 def add_thought_to_request(request: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
     request["thought"] = {
@@ -79,171 +80,280 @@ def _github_get_a_pull_request_post_proc(response: dict):
     
 
 
-
-toolset = ComposioToolSet(
-    processors={
-        "pre": {
-            App.GITHUB: pop_thought_from_request,
+def get_graph(repo_path):
+    toolset = ComposioToolSet(
+        metadata={
+            App.CODE_ANALYSIS_TOOL: {
+                "dir_to_index_path": repo_path,
+            }
         },
-        "schema": {
-            App.GITHUB: add_thought_to_request,
-        },
-        "post": {
-            Action.GITHUB_CREATE_AN_ISSUE_COMMENT: _github_pulls_create_review_comment_post_proc,
-            Action.GITHUB_CREATE_A_REVIEW_COMMENT_FOR_A_PULL_REQUEST: _github_pulls_create_review_comment_post_proc,
-            Action.GITHUB_LIST_COMMITS_ON_A_PULL_REQUEST: _github_list_commits_post_proc,
-            Action.GITHUB_GET_A_COMMIT: _github_diff_post_proc,
-            Action.GITHUB_GET_A_PULL_REQUEST: _github_get_a_pull_request_post_proc,
-            # Action.GITHUB_LIST_REVIEW_COMMENTS_ON_A_PULL_REQUEST: _github_list_review_comments_on_a_pull_request_post_proc,
+        processors={
+            "pre": {
+                App.GITHUB: pop_thought_from_request,
+                App.FILETOOL: pop_thought_from_request,
+                App.CODE_ANALYSIS_TOOL: pop_thought_from_request,
+            },
+            "schema": {
+                App.GITHUB: add_thought_to_request,
+                App.FILETOOL: add_thought_to_request,
+                App.CODE_ANALYSIS_TOOL: add_thought_to_request,
+            },
+            "post": {
+                Action.GITHUB_CREATE_AN_ISSUE_COMMENT: _github_pulls_create_review_comment_post_proc,
+                Action.GITHUB_CREATE_A_REVIEW_COMMENT_FOR_A_PULL_REQUEST: _github_pulls_create_review_comment_post_proc,
+                Action.GITHUB_LIST_COMMITS_ON_A_PULL_REQUEST: _github_list_commits_post_proc,
+                Action.GITHUB_GET_A_COMMIT: _github_diff_post_proc,
+                Action.GITHUB_GET_A_PULL_REQUEST: _github_get_a_pull_request_post_proc,
+                # Action.GITHUB_LIST_REVIEW_COMMENTS_ON_A_PULL_REQUEST: _github_list_review_comments_on_a_pull_request_post_proc,
+            }
         }
-    }
-)
-
-tools = [
-    *toolset.get_tools(
-        actions=[
-            Action.GITHUB_GET_A_PULL_REQUEST,
-            Action.GITHUB_LIST_COMMITS_ON_A_PULL_REQUEST,
-            Action.GITHUB_GET_A_COMMIT,
-            Action.GITHUB_CREATE_A_REVIEW_COMMENT_FOR_A_PULL_REQUEST,
-            Action.GITHUB_CREATE_AN_ISSUE_COMMENT,
-            # Action.GITHUB_LIST_REVIEW_COMMENTS_ON_A_PULL_REQUEST,
-            pr_get_diff,
-            pr_get_metadata,
-        ]
     )
-]
+
+
+    fetch_pr_tools = [
+        *toolset.get_tools(
+            actions=[
+                Action.GITHUB_GET_A_PULL_REQUEST,
+                Action.GITHUB_LIST_COMMITS_ON_A_PULL_REQUEST,
+                Action.GITHUB_GET_A_COMMIT,
+                get_pr_diff,
+                get_pr_metadata,
+            ]
+        )
+    ]
+
+    repo_analyzer_tools = [
+        *toolset.get_tools(
+            actions=[
+                Action.CODE_ANALYSIS_TOOL_GET_CLASS_INFO,
+                Action.CODE_ANALYSIS_TOOL_GET_METHOD_BODY,
+                Action.CODE_ANALYSIS_TOOL_GET_METHOD_SIGNATURE,
+                # Action.FILETOOL_LIST_FILES,
+                Action.FILETOOL_OPEN_FILE,
+                Action.FILETOOL_SCROLL,
+                # Action.FILETOOL_FIND_FILE,
+                Action.FILETOOL_SEARCH_WORD,
+            ]
+        )
+    ]
+
+    comment_on_pr_tools = [
+        *toolset.get_tools(
+            actions=[
+                Action.GITHUB_GET_A_COMMIT,
+                Action.GITHUB_CREATE_A_REVIEW_COMMENT_FOR_A_PULL_REQUEST,
+                Action.GITHUB_CREATE_AN_ISSUE_COMMENT,
+            ]
+        )
+    ]
+
+
+    if MODEL == "claude":
+        client = BedrockChat(
+            credentials_profile_name="default",
+            model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
+            region_name="us-east-1",
+            model_kwargs={"temperature": 0, "max_tokens": 8192},
+        )
+    else:
+        client = ChatOpenAI(
+            model="gpt-4-turbo",
+            temperature=0,
+            max_completion_tokens=4096,
+            api_key=os.environ["OPENAI_API_KEY"],
+        )
 
 
 
-# client = ChatOpenAI(
-#     model="gpt-4-turbo",
-#     temperature=0,
-#     max_completion_tokens=4096,
-#     api_key=os.environ["OPENAI_API_KEY"],
-# )
+    class AgentState(t.TypedDict):
+        messages: t.Annotated[t.Sequence[BaseMessage], operator.add]
+        sender: str
 
-client = BedrockChat(
-    credentials_profile_name="default",
-    model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
-    region_name="us-east-1",
-    model_kwargs={"temperature": 0, "max_tokens": 8192},
-)
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=4, max=10),
+    )
+    def invoke_with_retry(agent, state):
+        return agent.invoke(state)
+
+    def create_agent_node(agent, name):
+        def agent_node(state):
+            if MODEL == "claude" and isinstance(state["messages"][-1], AIMessage):
+                state["messages"].append(HumanMessage(content="Placeholder message"))
+
+            try:
+                result = invoke_with_retry(agent, state)
+            except Exception as e:
+                print(f"Failed to invoke agent after 3 attempts: {str(e)}")
+                result = AIMessage(
+                    content="I apologize, but I encountered an error and couldn't complete the task. Please try again or rephrase your request.",
+                    name=name,
+                )
+            if not isinstance(result, ToolMessage):
+                if isinstance(result, dict):
+                    result_dict = result
+                else:
+                    result_dict = result.dict()
+                result = AIMessage(
+                    **{
+                        k: v
+                        for k, v in result_dict.items()
+                        if k not in ["type", "name"]
+                    },
+                    name=name,
+                )
+            return {"messages": [result], "sender": name}
+        return agent_node
+            
+    def create_agent(system_prompt, tools):
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", system_prompt),
+                MessagesPlaceholder(variable_name="messages"),
+            ]
+        )
+        llm = client
+        if tools:
+            # return prompt | llm.bind_tools(tools)
+            return prompt | llm.bind_tools(tools)
+        else:
+            return prompt | llm
+
+    fetch_pr_agent_name = "Fetch-PR-Agent"
+    fetch_pr_agent = create_agent(PR_FETCHER_PROMPT, fetch_pr_tools)
+    fetch_pr_agent_node = create_agent_node(fetch_pr_agent, fetch_pr_agent_name)
+
+    repo_analyzer_agent_name = "Repo-Analyzer-Agent"
+    repo_analyzer_agent = create_agent(REPO_ANALYZER_PROMPT, repo_analyzer_tools)
+    repo_analyzer_agent_node = create_agent_node(repo_analyzer_agent, repo_analyzer_agent_name)
+
+    comment_on_pr_agent_name = "Comment-On-PR-Agent"
+    comment_on_pr_agent = create_agent(PR_COMMENT_PROMPT, comment_on_pr_tools)
+    comment_on_pr_agent_node = create_agent_node(comment_on_pr_agent, comment_on_pr_agent_name)
+
+    workflow = StateGraph(AgentState)
+
+    workflow.add_edge(START, fetch_pr_agent_name)
+    workflow.add_node(fetch_pr_agent_name, fetch_pr_agent_node)
+    workflow.add_node(repo_analyzer_agent_name, repo_analyzer_agent_node)
+    workflow.add_node(comment_on_pr_agent_name, comment_on_pr_agent_node)
+    workflow.add_node("fetch_pr_tools_node", ToolNode(fetch_pr_tools))
+    workflow.add_node("repo_analyzer_tools_node", ToolNode(repo_analyzer_tools))
+    workflow.add_node("comment_on_pr_tools_node", ToolNode(comment_on_pr_tools))
 
 
-
-tool_node = ToolNode(tools)
-
-class AgentState(t.TypedDict):
-    messages: t.Annotated[t.Sequence[BaseMessage], operator.add]
-    sender: str
-
-pr_review_agent_name = "PR-Review-Agent"
-
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
-def invoke_with_retry(agent, state):
-    return agent.invoke(state)
-
-def create_agent_node(agent, name):
-    def agent_node(state):
-        # if isinstance(state["messages"][-1], AIMessage):
-        #     state["messages"].append(HumanMessage(content="Placeholder message"))
-
-        try:
-            result = invoke_with_retry(agent, state)
-        except Exception as e:
-            print(f"Failed to invoke agent after 3 attempts: {str(e)}")
-            result = AIMessage(
-                content="I apologize, but I encountered an error and couldn't complete the task. Please try again or rephrase your request.",
-                name=name,
-            )
-        if not isinstance(result, ToolMessage):
-            if isinstance(result, dict):
-                result_dict = result
-            else:
-                result_dict = result.dict()
-            result = AIMessage(
-                **{
-                    k: v
-                    for k, v in result_dict.items()
-                    if k not in ["type", "name"]
-                },
-                name=name,
-            )
-        return {"messages": [result], "sender": name}
-    return agent_node
+    def fetch_pr_router(state) -> t.Literal["fetch_pr_tools_node", "continue", "analyze_repo"]:
+        messages = state["messages"]
+        for message in reversed(messages):
+            if isinstance(message, AIMessage):
+                last_ai_message = message
+                break
+        else:
+            last_ai_message = messages[-1]
         
-def create_agent(system_prompt, tools):
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", system_prompt),
-            MessagesPlaceholder(variable_name="messages"),
-        ]
+        if last_ai_message.tool_calls:
+            return "fetch_pr_tools_node"
+        if "ANALYZE REPO" in last_ai_message.content:
+            return "analyze_repo"
+        return "continue"
+
+    workflow.add_conditional_edges(
+        "fetch_pr_tools_node",
+        lambda x: x["sender"],
+        {fetch_pr_agent_name: fetch_pr_agent_name},
     )
-    llm = client
-    if tools:
-        # return prompt | llm.bind_tools(tools)
-        return prompt | llm.bind_tools(tools)
-    else:
-        return prompt | llm
+    workflow.add_conditional_edges(
+        fetch_pr_agent_name,
+        fetch_pr_router,
+        {
+            "continue": fetch_pr_agent_name,
+            "fetch_pr_tools_node": "fetch_pr_tools_node",
+            "analyze_repo": repo_analyzer_agent_name,
+        },
+    )
 
-pr_agent = create_agent(SYSTEM, tools)
-pr_agent_node = create_agent_node(pr_agent, pr_review_agent_name)
 
-workflow = StateGraph(AgentState)
+    def repo_analyzer_router(state) -> t.Literal["repo_analyzer_tools_node", "continue", "comment_on_pr"]:
+        messages = state["messages"]
+        for message in reversed(messages):
+            if isinstance(message, AIMessage):
+                last_ai_message = message
+                break
+        else:
+            last_ai_message = messages[-1]
+        
+        if last_ai_message.tool_calls:
+            return "repo_analyzer_tools_node"
+        if "ANALYSIS COMPLETED" in last_ai_message.content:
+            return "comment_on_pr"
+        return "continue"
 
-workflow.add_node(pr_review_agent_name, pr_agent_node)
-workflow.add_node("tool_node", tool_node)
-workflow.add_edge(START, pr_review_agent_name)
+    workflow.add_conditional_edges(
+        "repo_analyzer_tools_node",
+        lambda x: x["sender"],
+        {repo_analyzer_agent_name: repo_analyzer_agent_name},
+    )
+    workflow.add_conditional_edges(
+        repo_analyzer_agent_name,
+        repo_analyzer_router,
+        {
+            "continue": repo_analyzer_agent_name,
+            "repo_analyzer_tools_node": "repo_analyzer_tools_node",
+            "comment_on_pr": comment_on_pr_agent_name,
+        },
+    )
 
-def router(state) -> t.Literal["tool_node", "continue", "__end__"]:
-    messages = state["messages"]
-    for message in reversed(messages):
-        if isinstance(message, AIMessage):
-            last_ai_message = message
-            break
-    else:
-        last_ai_message = messages[-1]
-    
-    if last_ai_message.tool_calls:
-        return "tool_node"
-    if "REVIEW COMPLETED" in last_ai_message.content:
-        return "__end__"
-    return "continue"
 
-workflow.add_conditional_edges(
-    "tool_node",
-    lambda x: x["sender"],
-    {pr_review_agent_name: pr_review_agent_name},
-)
-workflow.add_conditional_edges(
-    pr_review_agent_name,
-    router,
-    {
-        "continue": pr_review_agent_name,
-        "tool_node": "tool_node",
-        "__end__": END,
-    },
-)
+    def comment_on_pr_router(state) -> t.Literal["comment_on_pr_tools_node", "continue", "analyze_repo", "__end__"]:
+        messages = state["messages"]
+        for message in reversed(messages):
+            if isinstance(message, AIMessage):
+                last_ai_message = message
+                break
+        else:
+            last_ai_message = messages[-1]
+        
+        if last_ai_message.tool_calls:
+            return "comment_on_pr_tools_node"
+        if "ANALYZE REPO" in last_ai_message.content:
+            return "analyze_repo"
+        if "REVIEW COMPLETED" in last_ai_message.content:
+            return "__end__"
+        return "continue"
 
-graph = workflow.compile()
+    workflow.add_conditional_edges(
+        "comment_on_pr_tools_node",
+        lambda x: x["sender"],
+        {comment_on_pr_agent_name: comment_on_pr_agent_name},
+    )
+    workflow.add_conditional_edges(
+        comment_on_pr_agent_name,
+        comment_on_pr_router,
+        {
+            "continue": comment_on_pr_agent_name,
+            "analyze_repo": repo_analyzer_agent_name,
+            "comment_on_pr_tools_node": "comment_on_pr_tools_node",
+            "__end__": END,
+        },
+    )
+
+    graph = workflow.compile()
+
+    return graph, toolset
 
 ########################################################
-import os
-from io import BytesIO
+# import os
+# from io import BytesIO
 
-from IPython.display import Image, display
-from PIL import Image
+# from IPython.display import Image, display
+# from PIL import Image
 
-png_data = graph.get_graph().draw_mermaid_png(
-    draw_method=MermaidDrawMethod.API,
-)
+# png_data = graph.get_graph().draw_mermaid_png(
+#     draw_method=MermaidDrawMethod.API,
+# )
 
-image = Image.open(BytesIO(png_data))
+# image = Image.open(BytesIO(png_data))
 
-output_path = "workflow_graph.png"
-image.save(output_path)
+# output_path = "workflow_graph.png"
+# image.save(output_path)
 

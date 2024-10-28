@@ -10,7 +10,7 @@ PR_URL = "https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}"
 
 
 @action(toolname="github")
-def pr_get_diff(owner: str, repo: str, pull_number: str, thought: str) -> str:
+def get_pr_diff(owner: str, repo: str, pull_number: str, thought: str) -> str:
     """
     Get .diff data for a github PR.
 
@@ -32,7 +32,7 @@ def pr_get_diff(owner: str, repo: str, pull_number: str, thought: str) -> str:
 
 
 @action(toolname="github")
-def pr_get_metadata(owner: str, repo: str, pull_number: str, thought: str) -> t.Dict:
+def get_pr_metadata(owner: str, repo: str, pull_number: str, thought: str) -> t.Dict:
     """
     Get metadata for a github PR.
 
