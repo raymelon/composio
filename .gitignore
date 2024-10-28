@@ -45,3 +45,6 @@ python/swe/tests/logs_dir
 python/swe/dockerfiles/indexed
 python/swe/agentic
 python/swe/dockerfiles/generated*
+
+python/swe/examples/pr_review_agent/*.ipynb
+python/swe/examples/pr_review_agent/codeanalysis.py
