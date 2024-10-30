@@ -47,14 +47,17 @@ export class ConnectedAccounts {
     }
 
     async initiate(
-        data: ConnectionsControllerInitiateConnectionData["body"] & {
+        data: Omit<ConnectionsControllerInitiateConnectionData["body"], "integrationId"> & {
             // Deprecated: use entityId
             userUuid?: string;
-            entityId?: string
+            entityId?: string;
+            appNames?: string;
+            integrationId?: string;
         }
     ): Promise<ConnectionRequest> {
-        if (data.userUuid) {
-            data.entityId = data.userUuid;
+        const { userUuid, entityId, appNames, integrationId, ...rest } = data;
+        if (data.entityId) {
+            data.userUuid = data.entityId;
         }
         const res =  await client.connections.initiateConnection({ body: data }).then(res => res.data)
 
