@@ -1,112 +1,19 @@
-<p align="center">
-  <a href="https://x.com/GanatraSoham/?utm_campaign=github-readme" target="_blank">
-    <img src="./python/docs/imgs/follow_x.png" width="100%" alt="Follow me" />
-  </a>
-  <br /> <br />
-</p>
-<p align="center">
-  <a href="https://app.composio.dev/?utm_campaign=github-readme" target="_blank">
-    <img src="./python/docs/imgs/try_hosted.png" width="100%" alt="Sign up" />
-  </a>
+<h1 align="center" id="top">
+  Composio
+</h1>
 
-  <br /> <br />
-</p>
-<p>
-  <a href="https://github.com/composiohq/composio/blob/master/README.md">EN</a> | <a href="https://github.com/composiohq/composio/blob/master/README-CN.md">CN</a> | <a href="https://github.com/composiohq/composio/blob/master/README-JP.md">JP</a>
-</p>
+<h3 align="center">
+Production Ready Toolset for Building Intelligent AI Agents
+</h3>
 
-<p align="center">
-  <a href="https://composio.dev//#gh-dark-mode-only">
-    <img src="./python/docs/imgs/composio_white_font.svg" width="318px" alt="Composio logo" />
-  </a>
-  <a href="https://composio.dev//#gh-light-mode-only">
-    <img src="./python/docs/imgs/composio_black_font.svg" width="318px" alt="Composio Logo" />
-  </a>
-</p>
-<p align="center">
-  <a href="https://github.com/composiodev/composio/actions/workflows/common.yml">
-  <img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/composiodev/composio/common.yml?label=Tests&style=plastic&logo=github&color=blue&cacheSeconds=60">
-  </a>
-  <a href="https://pypi.org/project/composio-core/">
-  <img alt="PyPI" src="https://img.shields.io/pypi/v/composio_core?label=Latest&style=plastic&logo=pypi&color=blue&cacheSeconds=60&logoColor=white">
-  </a>
-  <a href="https://www.npmjs.com/package/composio-core">
-  <img alt="NPM" src="https://img.shields.io/npm/v/composio-core?style=plastic&logo=npm&logoColor=white&label=latest&color=blue&cacheSeconds=60">
-  </a>
-  <a href="https://pypi.org/project/composio-core/">
-  <img alt="Downloads" src="https://img.shields.io/pypi/dm/composio-core?label=Downloads&style=plastic&logo=github&color=blue&cacheSeconds=60">
-  </a>
-  
-</p>
-
-<h2 align="center"><i>
-  Production Ready Toolset for AI Agents
-</i></h2>
-
-<h4 align="center">Equip your agent with high-quality tools & integrations without worrying about authentication, accuracy, and reliability in a single line of code!
-</h4>
 <div align="center">
-<p>
-<a href="https://docs.composio.dev" rel="dofollow"><strong>Explore the Docs »</strong></a>
-</p>
-
-<p>
-<a href="https://app.composio.dev">Try on Dashboard</a> <b>|</b>
-<a href="https://www.composio.dev">Homepage</a> <b>|</b>
-<!-- <a href="https://docs.composio.dev/guides/examples">Examples</a> |
-<a href="https://docs.composio.dev/chat-with-docs">Chat with Docs</a> | -->
-<a href="https://docs.composio.dev/sdk">SDK</a> <b>|</b>
-<a href="https://docs.composio.dev/api-reference/">APIs</a> 
-</p>
+<img src="docs/composio_flowchart.png" alt="Composio Flowchart" width="95%" height="100%">
 </div>
 
-<hr>
-<div align="center">
-<p >
-    <b>✨ Socials >></b>
-    <a href="https://dub.composio.dev/JoinHQ">Discord</a> <b>|</b>
-    <a href="https://www.youtube.com/@Composio">Youtube</a> <b>|</b>
-    <a href="https://twitter.com/composiohq">Twitter</a> <b>|</b>
-    <a href="https://www.linkedin.com/company/composio-dev"> Linkedin </a>
-</p>
-<p align="center">
-    <b>⛏️ Contribute >></b>
-    <a href="https://github.com/composiodev/composio/issues/new?assignees=&labels=type%3A+bug&template=bug_report.yml&title=%F0%9F%90%9B+Bug+Report%3A+">Report Bugs</a> <b>|</b>
-    <a href="https://github.com/composiodev/composio/issues/new?assignees=&labels=feature&template=feature_request.yml&title=%F0%9F%9A%80+Feature%3A+">Request Feature</a> <b>|</b>
-    <a href="https://github.com/composiodev/composio/blob/master/CONTRIBUTING.md">Contribute</a>
-</p>
-</div>
+## What is Composio?
 
-## 📋 Table of contents
-
-- [📋 Table of contents](#-table-of-contents)
-- [🤔 Why Composio?](#-why-composio)
-- [🔥 Key Features](#-key-features)
-- [🚀 Getting Started with Python](#-getting-started-with-python)
-  - [1. Installation](#1-installation)
-  - [2. Testing Composio in Action](#2-testing-composio-in-action)
-- [🚀 Getting Started with Javascript](#-getting-started-with-javascript)
-  - [1. **Install the Composio SDK**:](#1-install-the-composio-sdk)
-  - [2. **Setup the OpenAI and Composio Tool Set**:](#2-setup-the-openai-and-composio-tool-set)
-  - [3. **Run your script**:](#3-run-your-script)
-- [💡 Examples](#-examples)
-  - [Python Examples](#python-examples)
-  - [Javascript Examples](#javascript-examples)
-- [Star History](#star-history)
-- [📋 Read Our Code Of Conduct](#-read-our-code-of-conduct)
-- [🤗 Contributions](#-contributions)
-- [🔗 Links](#-links)
-- [🛡️ License](#️-license)
-- [💪 Thanks To All Contributors](#-thanks-to-all-contributors)
-
-## 🤔 Why Composio?
-
-We believe AI Based Agents/Workflows are the future.
-Composio is the best toolset to integrate AI Agents to best Agentic Tools and use them to accomplish tasks.
-
-<img alt="Illustration" src="./python/docs/imgs/banner.gif" style="border-radius: 5px"/>
-
-## 🔥 Key Features
+**Composio is the best toolset to integrate AI Agents to best Agentic Tools and use them to accomplish tasks.**,
+It supports:
 
 - **100+ Tools**: Support for a range of different categories
 
@@ -123,184 +30,127 @@ Composio is the best toolset to integrate AI Agents to best Agentic Tools and us
 - **Embeddable**: Whitelabel in the backend of your applications managing Auth & Integrations for all your users & agents and maintain a consistent experience.
 - **Pluggable**: Designed to be extended with additional Tools, Frameworks and Authorisation Protocols very easily.
 
-## 🚀 Getting Started with Python
+## Getting started with Python
 
-### 1. Installation
-
-To get started, type the following command in your Terminal.
-
-```bash
+```shell
 pip install composio-core
 ```
 
-If you want to install the 'composio' package along with its openai plugin: `pip install composio-openai`.
+## Github Agent
 
-### 2. Testing Composio in Action
-
-Let's use Composio to create an AI Agent that can star a Github Repo.
-
-```bash
-composio add github # Connect your Github - Run this in terminal
+Let's start by building a simple agent that can interact with GitHub. Create a file `github_agent.py`:
+```python
+# Run this in the terminal
+pip install composio-openai
+composio login
+composio add github
+export OPENAI_API_KEY=sk-xxx
 ```
 
 ```python
-
+from composio_openai import ComposioToolSet, App
 from openai import OpenAI
-from composio_openai import ComposioToolSet, App, Action
 
-openai_client = OpenAI(
-    api_key="{{OPENAIKEY}}"
+openai_client = OpenAI()
+composio_toolset = ComposioToolSet()
+
+tools = composio_toolset.get_tools(apps=[App.GITHUB])
+
+task = "Star the repo composiohq/composio on GitHub"
+
+response = openai_client.chat.completions.create(
+model="gpt-4-turbo-preview",
+tools=tools,
+messages=
+    [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": task},
+    ],
 )
 
-# Initialise the Composio Tool Set
-
-composio_tool_set = ComposioToolSet()
-
-# Get GitHub tools that are pre-configured
-actions = composio_tool_set.get_actions(
-    actions=[Action.GITHUB_STAR_A_REPOSITORY_FOR_THE_AUTHENTICATED_USER]
-)
-
-my_task = "Star a repo composiodev/composio on GitHub"
-
-# Setup openai assistant
-assistant_instruction = "You are a super intelligent personal assistant"
-
-assistant = openai_client.beta.assistants.create(
-    name="Personal Assistant",
-    instructions=assistant_instruction,
-    model="gpt-4-turbo",
-    tools=actions,
-)
-
-# create a thread
-thread = openai_client.beta.threads.create()
-
-message = openai_client.beta.threads.messages.create(
-    thread_id=thread.id,
-    role="user",
-    content=my_task
-)
-
-# Execute Agent with integrations
-run = openai_client.beta.threads.runs.create(
-    thread_id=thread.id,
-    assistant_id=assistant.id
-)
-
-
-# Execute Function calls
-response_after_tool_calls = composio_tool_set.wait_and_handle_assistant_tool_calls(
-    client=openai_client,
-    run=run,
-    thread=thread,
-)
-
-print(response_after_tool_calls)
+result = composio_toolset.handle_tool_calls(response)
+print(result)
 ```
 
-## 🚀 Getting Started with Javascript
+## Getting start with Javascript
+```shell 
+npm install composio-core
+```
 
-To get started with the Composio SDK in Javascript, follow these steps:
+## Google Calendar Agent
+```shell
+npm install composio-core openai
+export OPENAI_API_KEY=sk-xxx
+export COMPOSIO_API_KEY=xxx
+```
+Let's start by building a simple agent that can interact with Google Calendar. Create a file `calendar_agent.js`:
 
-### 1. **Install the Composio SDK**:
-   ```bash
-   npm install composio-core
-   ```
+```javascript
+import { OpenAI } from "openai";
+import { OpenAIToolSet } from "composio-core";
 
-### 2. **Setup the OpenAI and Composio Tool Set**:
-   ```javascript
-   import { OpenAI } from "openai";
-   import { OpenAIToolSet } from "composio-core";
+const toolset = new OpenAIToolSet({
+    apiKey: process.env.COMPOSIO_API_KEY,
+});
 
-   const toolset = new OpenAIToolSet({
-       apiKey: process.env.COMPOSIO_API_KEY,
-   });
+async function executeAgent(entityName) {
+    const entity = await toolset.client.getEntity(entityName)
 
-   async function setupUserConnectionIfNotExists(entityId) {
-       const entity = await toolset.client.getEntity(entityId);
-       const connection = await entity.getConnection('github');
+    const tools = await toolset.get_actions({ actions: ["GOOGLECALENDAR_QUICK_ADD"] }, entity.id);
+    const date = new Date();
+    const instruction = "Today's date is ${date}. Schedule an event of 1 hour tomorrow at 5:30PM"
 
-       if (!connection) {
-           // If this entity/user hasn't already connected the account
-           const connection = await entity.initiateConnection(appName);
-           console.log("Log in via: ", connection.redirectUrl);
-           return connection.waitUntilActive(60);
-       }
+    const client = new OpenAI({ apiKey: process.env.OPEN_AI_API_KEY })
+    const response = await client.chat.completions.create({
+        model: "gpt-4-turbo",
+        messages: [{
+            role: "user",
+            content: instruction,
+        }],
+        tools: tools,
+        tool_choice: "auto",
+    })
 
-       return connection;
-   }
+    console.log(response.choices[0].message.tool_calls);
+    await toolset.handle_tool_call(response, entity.id);
+}
 
-   async function executeAgent(entityName) {
-       const entity = await toolset.client.getEntity(entityName)
-       await setupUserConnectionIfNotExists(entity.id);
+executeAgent("default"); 
+```
 
-       const tools = await toolset.get_actions({ actions: ["github_issues_create"] }, entity.id);
-       const instruction = "Make an issue with sample title in the repo - himanshu-dixit/custom-repo-breaking"
+### Managed Authentication
 
-       const client = new OpenAI({ apiKey: process.env.OPEN_AI_API_KEY })
-       const response = await client.chat.completions.create({
-           model: "gpt-4-turbo",
-           messages: [{
-               role: "user",
-               content: instruction,
-           }],
-           tools: tools,
-           tool_choice: "auto",
-       })
+[IMAGE PLACEHOLDER: Authentication flow diagram]
 
-       console.log(response.choices[0].message.tool_calls);
-       await toolset.handle_tool_call(response, entity.id);
-   }
+### Composio handles Authentication for you
+1. Create an Integration for your external service (e.g., GitHub OAuth configuration)
+2. Users (Entities) use this Integration to connect their accounts
+3. Each successful connection creates a Connected Account
+4. Your application uses Connected Accounts to make authenticated requests
 
-   executeAgent("your-entity-name");
-   ```
+## Getting Help
 
-### 3. **Run your script**:
-   ```bash
-   node your_script.js
-   ```
+- Read the docs at [docs.composio.dev](https://docs.composio.dev)
+- Join our [Discord community](https://dub.composio.dev/JoinHQ)
+- Follow us on [Twitter](https://twitter.com/composiohq)
+- Subscribe to our [YouTube channel](https://www.youtube.com/@Composio)
 
-This will set up the Composio SDK and execute an agent that creates a GitHub issue using the provided instructions.
+## Contributing
 
-For more details, refer to the [Composio SDK Documentation](https://docs.composio.dev/).
-
-
-## 💡 Examples
-
-### [Python Examples](https://docs.composio.dev/guides/python/)
-
-### [Javascript Examples](https://docs.composio.dev/guides/javascript/)
-
-
+We welcome contributions! Please read our [Contribution Guidelines](CONTRIBUTING.md) before submitting PRs.
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=composiohq/composio&type=Date)](https://star-history.com/#composiohq/composio&Date)
+[IMAGE PLACEHOLDER: Star history chart]
 
+## License
 
-## 📋 Read Our Code Of Conduct
+Composio is licensed under the Elastic License - see the [LICENSE](LICENSE) file for details.
 
-As part of our open-source community, we hold ourselves and other contributors to a high standard of communication. As a participant and contributor to this project, you agree to abide by our [Code of Conduct](https://github.com/composiodev/composio/blob/master/CODE_OF_CONDUCT.md).
+## Thanks To All Contributors
 
-## 🤗 Contributions
+[IMAGE PLACEHOLDER: Contributors grid]
 
-Composio is open-source and we welcome contributions. Please fork the repository, create a new branch for your feature, add your feature or improvement, and send a pull request.
-
-Also go through our [Contribution Guidelines](https://github.com/composiodev/composio/blob/master/CONTRIBUTING.md) and [Code of Conduct](https://github.com/composiodev/composio/blob/master/CODE_OF_CONDUCT.md) before you start.
-
-## 🔗 Links
-
-- [Home page](https://composio.dev?utm_campaign=github-readme)
-- [Contribution Guidelines](https://github.com/composiodev/composio/blob/master/CONTRIBUTING.md)
-- [Docs](https://docs.composio.dev/?utm_campaign=github-readme)
-
-## 🛡️ License
-
-Composio is licensed under the Elastic License - see the [LICENSE](https://github.com/composiodev/composio/blob/master/LICENSE) file for details.
-
-## 💪 Thanks To All Contributors
-
-<a href="https://github.com/composiohq/composio/graphs/contributors">
-  <img src="https://contributors-img.web.app/image?repo=composiodev/composio" alt="List of Contributors"/>
-</a>
+<p align="right">
+  <a href="#top">⬆️ Back to Top</a>
+</p>
