@@ -1,6 +1,11 @@
-<h1 align="center" id="top">
-  Composio
-</h1>
+<p align="center">
+  <a href="https://composio.dev//#gh-dark-mode-only">
+    <img src="./python/docs/imgs/composio_white_font.svg" width="318px" alt="Composio logo" />
+  </a>
+  <a href="https://composio.dev//#gh-light-mode-only">
+    <img src="./python/docs/imgs/composio_black_font.svg" width="318px" alt="Composio Logo" />
+  </a>
+</p>
 
 <h3 align="center">
 Production Ready Toolset for Building Intelligent AI Agents
@@ -132,7 +137,7 @@ node calendar_agent.js
 You can find more Javascript examples [here](https://github.com/ComposioHQ/composio/tree/master/js/examples)
 
 
-### Managed Authentication
+## Managed Authentication
 
 ![Authentication flow diagram](docs/managed_auth.png)
 
@@ -142,6 +147,16 @@ You can find more Javascript examples [here](https://github.com/ComposioHQ/compo
 3. Each successful connection creates a Connected Account
 4. Your application uses Connected Accounts to make authenticated requests
 5. You can also whitelabel the OAuth Developer app that is shown to the user when he initiates the connection
+
+## Dashboard
+
+![Dashboard](docs/dashboard.png)
+
+### The Dashboard empowers you to:
+1. Build and manage tool integrations with a comprehensive connection system
+2. Configure automated triggers for seamless workflows 
+3. Monitor actions and triggers through detailed logging
+4. Gain insights through advanced analytics and reporting
 
 ## Getting Help
 
