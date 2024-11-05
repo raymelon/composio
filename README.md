@@ -38,7 +38,6 @@ pip install composio-core
 
 ## Github Agent
 
-Let's start by building a simple agent that can interact with GitHub. Create a file `github_agent.py`:
 ```python
 # Run this in the terminal
 pip install composio-openai
@@ -46,6 +45,7 @@ composio login
 composio add github
 export OPENAI_API_KEY=sk-xxx
 ```
+Let's start by building a simple agent that can interact with GitHub. Create a file `github_agent.py`:
 
 ```python
 from composio_openai import ComposioToolSet, App
@@ -71,6 +71,13 @@ messages=
 result = composio_toolset.handle_tool_calls(response)
 print(result)
 ```
+### Execute the Agent
+```python
+python github_agent.py
+```
+
+You can find more Python examples [here](https://github.com/ComposioHQ/composio/tree/master/python/examples)
+
 
 ## Getting start with Javascript
 ```shell 
@@ -117,16 +124,24 @@ async function executeAgent(entityName) {
 
 executeAgent("default"); 
 ```
+### Execute the agent
+
+```javascript
+node calendar_agent.js
+```
+You can find more Javascript examples [here](https://github.com/ComposioHQ/composio/tree/master/js/examples)
+
 
 ### Managed Authentication
 
-[IMAGE PLACEHOLDER: Authentication flow diagram]
+![Authentication flow diagram](docs/managed_auth.png)
 
 ### Composio handles Authentication for you
 1. Create an Integration for your external service (e.g., GitHub OAuth configuration)
 2. Users (Entities) use this Integration to connect their accounts
 3. Each successful connection creates a Connected Account
 4. Your application uses Connected Accounts to make authenticated requests
+5. You can also whitelabel the OAuth Developer app that is shown to the user when he initiates the connection
 
 ## Getting Help
 
@@ -135,22 +150,29 @@ executeAgent("default");
 - Follow us on [Twitter](https://twitter.com/composiohq)
 - Subscribe to our [YouTube channel](https://www.youtube.com/@Composio)
 
-## Contributing
-
-We welcome contributions! Please read our [Contribution Guidelines](CONTRIBUTING.md) before submitting PRs.
-
 ## Star History
 
-[IMAGE PLACEHOLDER: Star history chart]
+[![Star History Chart](https://api.star-history.com/svg?repos=composiohq/composio&type=Date)](https://star-history.com/#composiohq/composio&Date)
 
-## License
 
-Composio is licensed under the Elastic License - see the [LICENSE](LICENSE) file for details.
+## 🤗 Contributions
 
-## Thanks To All Contributors
+Composio is open-source and we welcome contributions. Please fork the repository, create a new branch for your feature, add your feature or improvement, and send a pull request.
 
-[IMAGE PLACEHOLDER: Contributors grid]
+Also go through our [Contribution Guidelines](https://github.com/composiodev/composio/blob/master/CONTRIBUTING.md) and [Code of Conduct](https://github.com/composiodev/composio/blob/master/CODE_OF_CONDUCT.md) before you start.
 
-<p align="right">
-  <a href="#top">⬆️ Back to Top</a>
-</p>
+## 🔗 Links
+
+- [Home page](https://composio.dev?utm_campaign=github-readme)
+- [Contribution Guidelines](https://github.com/composiodev/composio/blob/master/CONTRIBUTING.md)
+- [Docs](https://docs.composio.dev/?utm_campaign=github-readme)
+
+## 🛡️ License
+
+Composio is licensed under the Elastic License - see the [LICENSE](https://github.com/composiodev/composio/blob/master/LICENSE) file for details.
+
+## 💪 Thanks To All Contributors
+
+<a href="https://github.com/composiohq/composio/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=composiodev/composio" alt="List of Contributors"/>
+</a>
