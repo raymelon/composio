@@ -1,0 +1,200 @@
+---
+title: "Scheduling Agent"
+sidebarTitle: "Scheduling Agent"
+icon: "calendar-check"
+description: "This project demonstrates how to create an automated scheduling agent that monitors incoming emails, analyzes their content for meeting requests, and automatically schedules meetings using Google Calendar. The agent also sends confirmation emails using Gmail, creating a seamless scheduling workflow."
+---
+
+<Card color="#7bee0c" title="Scheduling Agent GitHub Repository" icon="github" href="https://github.com/ComposioHQ/composio/tree/master/python/examples/advanced_agents/scheduler_agent">
+  Explore the complete source code for the Scheduling Agent project. This repository contains all the necessary files and scripts to set up and run the scheduling automation system using Langchain and Composio.
+</Card>
+
+<Steps>
+    <Step title="Import Required Packages">
+    First, we'll import the necessary libraries for our project:
+    <CodeGroup>
+        ```python Import libraries
+        import os
+        import re
+        from datetime import datetime
+        from dotenv import load_dotenv
+        from composio_langchain import Action, ComposioToolSet
+        from composio_langchain import ComposioToolSet, Action, App
+        from langchain_openai import ChatOpenAI
+        from langchain import hub
+        from langchain.agents import AgentExecutor, create_openai_functions_agent
+        from composio.client.collections import TriggerEventData
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Initialize Language Model and Tools">
+    Set up the language model and configure the necessary Composio tools:
+    <CodeGroup>
+        ```python Setup LLM and Tools
+        load_dotenv()
+
+        llm = ChatOpenAI(model="gpt-4-turbo")
+
+        composio_toolset = ComposioToolSet()
+
+        schedule_tool = composio_toolset.get_actions(
+            actions=[
+                Action.GOOGLECALENDAR_FIND_FREE_SLOTS,
+                Action.GOOGLECALENDAR_CREATE_EVENT,
+                Action.GMAIL_CREATE_EMAIL_DRAFT,
+            ]
+        )
+        email_tool = composio_toolset.get_actions(actions=[Action.GMAIL_CREATE_EMAIL_DRAFT])
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Create Agent Executor">
+    Initialize the OpenAI Functions agent with the required tools:
+    <CodeGroup>
+        ```python Setup Agent
+        date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        timezone = datetime.now().astimezone().tzinfo
+
+        prompt = hub.pull("hwchase17/openai-functions-agent")
+        query_agent = create_openai_functions_agent(llm, schedule_tool, prompt)
+        agent_executor = AgentExecutor(agent=query_agent, tools=schedule_tool, verbose=True)
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Set Up Email Trigger Listener">
+    Create and configure the email trigger listener with a callback function:
+    <CodeGroup>
+        ```python Email Trigger
+        listener = composio_toolset.create_trigger_listener()
+
+        @listener.callback(filters={"trigger_name": "gmail_new_gmail_message"})
+        def callback_new_message(event: TriggerEventData) -> None:
+            payload = event.payload
+            thread_id = payload.get("threadId")
+            message = payload.get("messageText")
+            sender_mail = payload.get("sender")
+            
+            if sender_mail is None:
+                print("No sender email found")
+                return
+
+            query_task = f"""
+                1. Analyze the email content and decide if an event should be created. 
+                    a. The email was received from {sender_mail} 
+                    b. The content of the email is: {message} 
+                    c. The thread id is: {thread_id}.
+                2. If you decide to create an event, try to find a free slot 
+                using Google Calendar Find Free Slots action.
+                3. Once you find a free slot, use Google Calendar Create Event 
+                action to create the event at a free slot and send the invite to {sender_mail}.
+                If an event was created, draft a confirmation email for the created event. 
+                The receiver of the mail is: {sender_mail}, the subject should be meeting scheduled and body
+                should describe what the meeting is about.
+                The date is {date_time} and timezone is {timezone}
+                """
+            res = agent_executor.invoke({"input": query_task})
+            print(res)
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Start the Listener">
+    Finally, start the email trigger listener:
+    <CodeGroup>
+        ```python Start Listener
+        print("Subscription created!")
+        listener.listen()
+        ```
+    </CodeGroup>
+    </Step>
+</Steps>
+
+## Complete Code
+
+Here's the complete Python code for the Scheduling Agent:
+
+<CodeGroup>
+```python Python Final Code
+import os
+import re
+from datetime import datetime
+from dotenv import load_dotenv
+from composio_langchain import Action, ComposioToolSet
+from composio_langchain import ComposioToolSet, Action, App
+from langchain_openai import ChatOpenAI
+from langchain import hub
+from langchain.agents import AgentExecutor, create_openai_functions_agent
+from composio.client.collections import TriggerEventData
+
+load_dotenv()
+
+llm = ChatOpenAI(model="gpt-4-turbo")
+
+composio_toolset = ComposioToolSet()
+
+schedule_tool = composio_toolset.get_actions(
+    actions=[
+        Action.GOOGLECALENDAR_FIND_FREE_SLOTS,
+        Action.GOOGLECALENDAR_CREATE_EVENT,
+        Action.GMAIL_CREATE_EMAIL_DRAFT,
+    ]
+)
+email_tool = composio_toolset.get_actions(actions=[Action.GMAIL_CREATE_EMAIL_DRAFT])
+date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+timezone = datetime.now().astimezone().tzinfo
+
+prompt = hub.pull("hwchase17/openai-functions-agent")
+query_agent = create_openai_functions_agent(llm, schedule_tool, prompt)
+agent_executor = AgentExecutor(agent=query_agent, tools=schedule_tool, verbose=True)
+
+def extract_sender_email(payload):
+    delivered_to_header_found = False
+    for header in payload["headers"]:
+        if header.get("name", "") == "Delivered-To" and header.get("value", "") != "":
+            delivered_to_header_found = True
+    if not delivered_to_header_found:
+        return None
+    for header in payload["headers"]:
+        if header["name"] == "From":
+            match = re.search(r"[\w\.-]+@[\w\.-]+", header["value"])
+            if match:
+                return match.group(0)
+    return None
+
+listener = composio_toolset.create_trigger_listener()
+
+@listener.callback(filters={"trigger_name": "gmail_new_gmail_message"})
+def callback_new_message(event: TriggerEventData) -> None:
+    payload = event.payload
+    thread_id = payload.get("threadId")
+    message = payload.get("messageText")
+    sender_mail = payload.get("sender")
+    
+    if sender_mail is None:
+        print("No sender email found")
+        return
+
+    query_task = f"""
+        1. Analyze the email content and decide if an event should be created. 
+            a. The email was received from {sender_mail} 
+            b. The content of the email is: {message} 
+            c. The thread id is: {thread_id}.
+        2. If you decide to create an event, try to find a free slot 
+        using Google Calendar Find Free Slots action.
+        3. Once you find a free slot, use Google Calendar Create Event 
+        action to create the event at a free slot and send the invite to {sender_mail}.
+        If an event was created, draft a confirmation email for the created event. 
+        The receiver of the mail is: {sender_mail}, the subject should be meeting scheduled and body
+        should describe what the meeting is about.
+        The date is {date_time} and timezone is {timezone}
+        """
+    res = agent_executor.invoke({"input": query_task})
+    print(res)
+
+print("Subscription created!")
+listener.listen()
+```
+</CodeGroup>
