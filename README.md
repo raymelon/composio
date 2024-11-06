@@ -15,38 +15,56 @@ Production Ready Toolset for Building Intelligent AI Agents
 <img src="docs/composio_flowchart.png" alt="Composio Flowchart" width="95%" height="100%">
 </div>
 
-## What is Composio?
+## 🎯 Overview
 
-**Composio is the best toolset to integrate AI Agents to best Agentic Tools and use them to accomplish tasks.**,
-It supports:
+Composio is the ultimate toolset for integrating AI Agents with production-ready tools. Build powerful AI applications with 100+ pre-built integrations, multiple framework support, and enterprise-grade authentication management.
 
-- **100+ Tools**: Support for a range of different categories
+## ✨ Key Features
 
-  - **Software**: Do anything on GitHub, Notion, Linear, Gmail, Slack, Hubspot, Salesforce, & 90 more.
-  - **OS**: Click anywhere, Type anything, Copy to Clipboard, & more.
-  - **Browser**: Smart Search, Take a screenshot, MultiOn, Download, Upload, & more.
-  - **Search**: Google Search, Perplexity Search, Tavily, Exa & more.
-  - **SWE**: Ngrok, Database, Redis, Vercel, Git, etc.
-  - **RAG**: Agentic RAG for any type of data on the fly!
+- **Extensive Tool Library**: 100+ integrations across Software, OS, Browser, Search, and Development categories
+- **Framework Flexibility**: Compatible with OpenAI, Claude, LangChain, LlamaIndex, CrewAI and more
+- **Enterprise Auth**: Built-in support for OAuth, API Keys, JWT, and other auth protocols
+- **Superior Accuracy**: Up to 40% better agentic accuracy through optimized tool design
+- **White-Label Ready**: Embed seamlessly in your applications
+- **Extensible Architecture**: Easy to add new tools, frameworks, and auth protocols
 
-- **Frameworks**: Use tools with agent frameworks like **OpenAI, Groq (OpenAI compatible), Claude, LlamaIndex, Langchain, CrewAI, Autogen, Gemini, Julep, Lyzr**, and more in a single line of code.
-- **Managed Authorisation**: Supports six different auth protocols. _Access Token, Refresh token, OAuth, API Keys, JWT, and more_ abstracted out so you can focus on the building agents.
-- **Accuracy**: Get _up to 40% better agentic accuracy_ in your tool calls due to better tool designs.
-- **Embeddable**: Whitelabel in the backend of your applications managing Auth & Integrations for all your users & agents and maintain a consistent experience.
-- **Pluggable**: Designed to be extended with additional Tools, Frameworks and Authorisation Protocols very easily.
+## 🚀 Quick Start
 
-## Getting started with Python
+Choose your preferred language to get started:
 
+### Python
 ```shell
 pip install composio-core
+composio login
 ```
 
-## Github Agent
+### JavaScript
+```shell
+npm install composio-core
+```
 
-```python
-# Run this in the terminal
+### Authentication Flow
+![Authentication flow diagram](docs/managed_auth.png)
+
+Composio handles Authentication for you
+- Create an Integration for your external service (e.g., GitHub OAuth configuration)
+- Users (Entities) use this Integration to connect their accounts
+- Each successful connection creates a Connected Account
+- Your application uses Connected Accounts to make authenticated requests
+- You can also whitelabel the OAuth Developer app that is shown to the user when they initiate the connection
+
+## 🛠️ Detailed Setup & Usage
+
+### Python Integration
+
+#### Installation
+```shell
 pip install composio-openai
-composio login
+```
+
+#### Github Agent
+
+```shell
 composio add github
 export OPENAI_API_KEY=sk-xxx
 ```
@@ -76,20 +94,55 @@ messages=
 result = composio_toolset.handle_tool_calls(response)
 print(result)
 ```
-### Execute the Agent
+#### Execute the Agent
 ```python
 python github_agent.py
 ```
 
-You can find more Python examples [here](https://github.com/ComposioHQ/composio/tree/master/python/examples)
+### Web Search Agent on Slack
+```shell
+composio add serpapi
+composio add slack
+export OPENAI_API_KEY=sk-xxx
+```
+Let's start by building a simple agent that can search the Web and reply on Slack. Create a file `slack_agent.py`:
 
+```python
+from composio_openai import ComposioToolSet, App
+from openai import OpenAI
 
-## Getting start with Javascript
-```shell 
-npm install composio-core
+openai_client = OpenAI()
+composio_toolset = ComposioToolSet()
+
+tools = composio_toolset.get_tools(apps=[App.SLACK, App.SERPAPI])
+
+task = "Find the top 5 performing stocks currently and tell me on my slack general channel"
+
+response = openai_client.chat.completions.create(
+model="gpt-4-turbo-preview",
+tools=tools,
+messages=
+    [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": task},
+    ],
+)
+
+result = composio_toolset.handle_tool_calls(response)
+print(result)
+```
+### Execute the Agent
+```python
+python slack_agent.py
 ```
 
-## Google Calendar Agent
+
+#### More Examples
+Check out our [Python examples directory](https://github.com/ComposioHQ/composio/tree/master/python/examples) for more advanced use cases.
+
+### JavaScript Integration
+
+#### Installation
 ```shell
 npm install composio-core openai
 export OPENAI_API_KEY=sk-xxx
@@ -112,7 +165,7 @@ async function executeAgent(entityName) {
     const date = new Date();
     const instruction = "Today's date is ${date}. Schedule an event of 1 hour tomorrow at 5:30PM"
 
-    const client = new OpenAI({ apiKey: process.env.OPEN_AI_API_KEY })
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
     const response = await client.chat.completions.create({
         model: "gpt-4-turbo",
         messages: [{
@@ -126,49 +179,79 @@ async function executeAgent(entityName) {
     console.log(response.choices[0].message.tool_calls);
     await toolset.handle_tool_call(response, entity.id);
 }
-
-executeAgent("default"); 
 ```
-### Execute the agent
-
-```javascript
+#### Execute the Agent
+```shell
 node calendar_agent.js
 ```
-You can find more Javascript examples [here](https://github.com/ComposioHQ/composio/tree/master/js/examples)
 
+### Web Search Agent on Slack
 
-## Managed Authentication
+```shell
+npm install composio-core openai
+export OPENAI_API_KEY=sk-xxx
+export COMPOSIO_API_KEY=xxx
+```
+Let's start by building a simple agent that can search the Web and reply on Slack. Create a file `slack_agent.js`:
 
-![Authentication flow diagram](docs/managed_auth.png)
+```javascript
+import { OpenAI } from "openai";
+import { OpenAIToolSet } from "composio-core";
 
-### Composio handles Authentication for you
-1. Create an Integration for your external service (e.g., GitHub OAuth configuration)
-2. Users (Entities) use this Integration to connect their accounts
-3. Each successful connection creates a Connected Account
-4. Your application uses Connected Accounts to make authenticated requests
-5. You can also whitelabel the OAuth Developer app that is shown to the user when he initiates the connection
+const toolset = new OpenAIToolSet({
+    apiKey: process.env.COMPOSIO_API_KEY,
+});
 
-## Dashboard
+async function executeAgent(entityName) {
+    const entity = await toolset.client.getEntity(entityName)
+
+    const tools = await toolset.get_actions({ actions: ["SERPAPI_SEARCH","SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL"] }, entity.id);
+    const date = new Date();
+    const instruction = "Find the top 5 performing stocks currently and tell me on my slack general channel";
+
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    const response = await client.chat.completions.create({
+        model: "gpt-4-turbo",
+        messages: [{
+            role: "user",
+            content: instruction,
+        }],
+        tools: tools,
+        tool_choice: "auto",
+    })
+
+    console.log(response.choices[0].message.tool_calls);
+    await toolset.handle_tool_call(response, entity.id);
+}
+```
+### Execute the Agent
+```python
+node slack_agent.js
+```
+
+## 🔍 Dashboard & Monitoring
 
 ![Dashboard](docs/dashboard.png)
 
-### The Dashboard empowers you to:
-1. Build and manage tool integrations with a comprehensive connection system
-2. Configure automated triggers for seamless workflows 
-3. Monitor actions and triggers through detailed logging
-4. Gain insights through advanced analytics and reporting
+Our comprehensive dashboard enables:
+- Integration management
+- Workflow automation
+- Detailed logging
+- Advanced analytics
 
-## Getting Help
+## 📖 Examples Library
 
-- Read the docs at [docs.composio.dev](https://docs.composio.dev)
-- Join our [Discord community](https://dub.composio.dev/JoinHQ)
-- Follow us on [Twitter](https://twitter.com/composiohq)
-- Subscribe to our [YouTube channel](https://www.youtube.com/@Composio)
+- [Python Examples](https://github.com/ComposioHQ/composio/tree/master/python/examples/)
 
-## Star History
+- [JavaScript Examples](https://github.com/ComposioHQ/composio/tree/master/js/examples/)
 
-[![Star History Chart](https://api.star-history.com/svg?repos=composiohq/composio&type=Date)](https://star-history.com/#composiohq/composio&Date)
 
+## 🤝 Community & Support
+
+- [Documentation](https://docs.composio.dev)
+- [Discord Community](https://dub.composio.dev/JoinHQ)
+- [Twitter](https://twitter.com/composiohq)
+- [YouTube Channel](https://www.youtube.com/@Composio)
 
 ## 🤗 Contributions
 
