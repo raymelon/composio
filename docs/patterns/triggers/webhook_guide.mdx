@@ -1,0 +1,78 @@
+---
+title: "Receive Events in your Webhook Endpoint"
+sidebarTitle: "Events on Webhook"
+icon: "webhook"
+description: "Guide to receive Trigger and Admin Events in your Webhook Endpoint"
+---
+When you use Composio you can receive two kinds of events:
+1. Trigger Events
+2. Admin Events
+
+Receiving webhook events is particularly useful for listening to events such as when an Email is received on your Gmail, when you receive a Slack Message, or when a new Connection is created.
+
+<Steps>
+    <Step title='Create an Event Destination'>
+    You need to create an event destination to receive events at an HTTPS webhook endpoint. After you register a webhook endpoint, Composio can push event data to your application’s webhook endpoint when events happen.
+    To see how it works, you can create an event destination on Pipedream.
+    1. Access Pipedream:
+    - Log in to your Pipedream account or create a new one if you don't have one.
+    2. Create a New Workflow:
+    - Navigate to the "Projects" section in Pipedream.
+    - Click "Create New Workflow" at the top right.
+    - Give your workflow a descriptive name (e.g., "New Customer Signup Webhook").
+    3. Add the HTTP/Webhook Trigger:
+    - In the workflow builder, click on the "Add Trigger" option.
+    - Select "HTTP/Webhook" as the trigger type.
+    - This will generate a unique URL that you'll need to paste into your external application's webhook settings.
+    </Step>
+
+    <Step title='Configuring Composio'>
+    1. Go to the [Events and Triggers Section](https://app.composio.dev/events_and_triggers) in the Composio Dashboard.
+    2. Paste the URL generated in the previous step into the 'Trigger Webhook URL' and 'Admin Event Webhook URL' and click 'Update'.
+    </Step>
+
+    <Step title='Viewing Received Events'>
+    You can view the Received Events in your Pipedream workflow page.
+
+    Here's what a sample Event looks like: 
+    <CodeGroup>
+    ```shell Trigger Event
+    {
+        body: {
+            threadId: "19304057f434b32a"
+            messageId: "19304057f434b32a"
+            messageTimestamp: "2024-11-07T00:15:55Z"
+            messageText: "View this post on the web at https://read.substack.com/ In a twist, what..."
+            attachmentList: [...]
+            subject: "The U.S. economy ..."
+            sender: "Substack Reads <read@substack.com>"
+            to: "demo@gmail.com"
+            payload: {...}
+        }
+    }
+    ```
+
+    ```shell Admin Event
+    {
+    "body": {
+        "type": "connected_account.add.completed",
+        "timestamp": "2024-11-07T08:49:21.820Z",
+        "data": {
+        "app_name": "gmail",
+        "integration_id": "12345678-abcd-ef00-1234-56789abcdef0",
+        "body": {
+            "access_token": "ya29",
+            "expires_in": 3599,
+            "refresh_token": "1//05kmszkwK0ZmhCgYIARAAGAUSNwF",
+            "scope": "https://www.googleapis.com/auth/gmail.modify",
+            "token_type": "Bearer",
+            "connected_account_id": "abcdef12-3456-7890-abcd",
+            "status": "success"
+        }
+        }
+    }
+    }
+    ```
+    </CodeGroup>
+    </Step>
+</Steps>
