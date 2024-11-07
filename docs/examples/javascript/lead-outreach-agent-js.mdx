@@ -1,0 +1,182 @@
+---
+title: "Lead Outreach Agent"
+sidebarTitle: "Lead Outreach Agent"
+icon: "envelope"
+description: "This project demonstrates how to use Composio to create a lead outreach agent in JavaScript. It automatically researches the lead based on user input, and then writes an excellent outreach email."
+---
+
+    <Card color="#7bee0c" title="Lead Outreach Agent GitHub Repository" icon="github" href="https://github.com/ComposioHQ/composio/tree/master/js/examples/lead_outreach_agent">
+  Explore the complete source code for the Lead Outreach Agent project. This repository contains all the necessary files and scripts to set up and run the Lead Outreach Agent using Composio and Express.
+  <CardBody>
+  </CardBody>
+</Card>
+<Steps>
+    <Step title="Import Base Packages">
+    First, we'll import the necessary libraries for our project.
+    <CodeGroup>
+        ```javascript Import Statements
+        import express from 'express';
+        import { ChatOpenAI } from "@langchain/openai";
+        import { createOpenAIFunctionsAgent, AgentExecutor } from "langchain/agents";
+        import { pull } from "langchain/hub";
+        import dotenv from 'dotenv';
+        import { LangchainToolSet } from "composio-core";
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Initialize Express App">
+    We'll initialize our Express application and load environment variables.
+    <CodeGroup>
+        ```javascript Initialize Express App
+        dotenv.config();
+        const app = express();
+        const PORT = process.env.PORT || 2001;
+
+        app.use(express.json());
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Set Up the Agent">
+    Set up the agent with the necessary tools and model.
+    <CodeGroup>
+        ```javascript Set Up the Agent
+        (async () => {
+            try {
+                const llm = new ChatOpenAI({
+                    model: "gpt-4-turbo",
+                });
+
+                const toolset = new LangchainToolSet({
+                    apiKey: process.env.COMPOSIO_API_KEY,
+                });
+
+                const tools = await toolset.get_actions({
+                    actions: ["EXA_SEARCH", "GMAIL_CREATE_EMAIL_DRAFT"]
+                });
+
+                const prompt = await pull("hwchase17/openai-functions-agent");
+
+                const additional = `
+                    "You are a Lead Outreach Agent that is equipped with great tools for research "
+                    "and is an expert writer. Your job is to first research some info about the lead "
+                    "given to you and then draft a perfect ideal email for whatever input task is given to you. "
+                    "Always write the subject, content of the email and nothing else."`;
+
+                const agent = await createOpenAIFunctionsAgent({
+                    llm,
+                    tools,
+                    prompt,
+                });
+
+                const agentExecutor = new AgentExecutor({
+                    agent,
+                    tools,
+                    verbose: true,
+                });
+                const my_details = "I am Karan Vaidya, the founder of Composio"
+                const lead_details = "John Doe, a marketing manager at Acme Corp, interested in our SaaS solutions.";
+                const purpose = "to introduce our new product features and schedule a demo.";
+
+                const result = await agentExecutor.invoke({
+                    input: `${additional}
+                    These are the lead details that we know ${lead_details}. This is the purpose to write the email:${purpose}. Write a well written email for the purpose to the lead.
+                    Create a draft in gmail. research on the lead
+                    My details: ${my_details}
+                    `
+                });
+
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Launch the Server">
+    Finally, launch the Express server.
+    <CodeGroup>
+        ```javascript Launch the Server
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+        ```
+    </CodeGroup>
+    </Step>
+
+</Steps>
+
+## Putting It All Together
+
+<CodeGroup>
+```javascript JavaScript Final Code
+import express from 'express';
+import { ChatOpenAI } from "@langchain/openai";
+import { createOpenAIFunctionsAgent, AgentExecutor } from "langchain/agents";
+import { pull } from "langchain/hub";
+import dotenv from 'dotenv';
+import { LangchainToolSet } from "composio-core";
+
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 2001;
+
+app.use(express.json());
+
+(async () => {
+    try {
+        const llm = new ChatOpenAI({
+            model: "gpt-4-turbo",
+        });
+
+        const toolset = new LangchainToolSet({
+            apiKey: process.env.COMPOSIO_API_KEY,
+        });
+
+        const tools = await toolset.get_actions({
+            actions: ["EXA_SEARCH", "GMAIL_CREATE_EMAIL_DRAFT"]
+        });
+
+        const prompt = await pull("hwchase17/openai-functions-agent");
+
+        const additional = `
+            "You are a Lead Outreach Agent that is equipped with great tools for research "
+            "and is an expert writer. Your job is to first research some info about the lead "
+            "given to you and then draft a perfect ideal email for whatever input task is given to you. "
+            "Always write the subject, content of the email and nothing else."`;
+
+        const agent = await createOpenAIFunctionsAgent({
+            llm,
+            tools,
+            prompt,
+        });
+
+        const agentExecutor = new AgentExecutor({
+            agent,
+            tools,
+            verbose: true,
+        });
+        const my_details = "I am Karan Vaidya, the founder of Composio"
+        const lead_details = "John Doe, a marketing manager at Acme Corp, interested in our SaaS solutions.";
+        const purpose = "to introduce our new product features and schedule a demo.";
+        const result = await agentExecutor.invoke({
+            input: `${additional}
+            These are the lead details that we know ${lead_details}. This is the purpose to write the email:${purpose}. Write a well written email for the purpose to the lead.
+            Create a draft in gmail. research on the lead
+            My details: ${my_details}
+            `
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
+})();
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+```
+</CodeGroup>
+

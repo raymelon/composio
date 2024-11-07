@@ -1,0 +1,166 @@
+---
+title: "Lead Generator Agent"
+sidebarTitle: "Lead Generator Agent"
+icon: "user"
+description: "This project demonstrates how to use Composio to create a lead generator agent that fetches relevant leads and populates them into a Google Sheet."
+---
+
+<Card color="#7bee0c" title="Lead Generator Agent GitHub Repository" icon="github" href="https://github.com/ComposioHQ/composio/tree/master/js/examples/lead_generator_agent">
+  Explore the complete source code for the Lead Generator Agent project. This repository contains all the necessary files and scripts to set up and run the Lead Outreach Agent using Composio and Express.
+  <CardBody>
+  </CardBody>
+</Card>
+
+## Setup
+### Install Required Packages
+Make sure to install the necessary packages for the project:
+
+```shell
+pnpm install @ai-sdk/openai ai zod composio-core dotenv
+```
+
+<Steps>
+    <Step title="Import Base Packages">
+    Next, import the essential libraries for your project.
+    <CodeGroup>
+        ```javascript Import Statements
+        import dotenv from 'dotenv';
+        import { ChatOpenAI } from "@langchain/openai";
+        import { createOpenAIFunctionsAgent, AgentExecutor } from "langchain/agents";
+        import { pull } from "langchain/hub";
+        import { LangchainToolSet } from "composio-core";
+
+        dotenv.config();
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Initialize the Language Model">
+    Set up the language model using OpenAI's API.
+    <CodeGroup>
+        ```javascript Initialize Language Model
+        const llm = new ChatOpenAI({ model: "gpt-4o" });
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Define Tools for the Agent">
+    Initialize the toolset and retrieve the necessary tools for the agent.
+    <CodeGroup>
+        ```javascript Define Tools
+        const toolset = new LangchainToolSet({
+            apiKey: process.env.COMPOSIO_API_KEY
+        });
+
+        // Retrieve tools for the specified app
+        const tools = await toolset.get_tools({ apps: ["exa", "browserbase_tool", "googlesheets"] }, entity.id);
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Generate Leads">
+    Define the parameters for lead generation and create the prompt for the agent.
+    <CodeGroup>
+        ```javascript Generate Leads
+        const businessName = 'Dan';
+        const leadDescription = 'tech bloggers like Packy Mccormick';
+        const spreadsheetid = '14T4e0j1XsWjriQYeFMgkM2ihyvLAplPqB9q8hytytcw';
+
+        // Generate text using the model and tools
+        const output = await generateText({
+            model: openai("gpt-4o"),
+            streamText: false,
+            tools: tools,
+            prompt: `
+                You are a lead research agent. Based on user input, find 5 relevant leads using available browser tools.
+                After finding the leads, create a Google Sheet with the details for the business: ${businessName}, 
+                lead description: ${leadDescription}, and spreadsheet ID: ${spreadsheetid}.
+            `, 
+            maxToolRoundtrips: 5,
+        });
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Output">
+    Finally, log the output from the agent.
+    <CodeGroup>
+        ```javascript Log Output
+        console.log("🎉Output from agent: ", output.text);
+        ```
+    </CodeGroup>
+    </Step>
+
+    <Step title="Execution">
+    To execute the agent, call the function with the appropriate user context.
+    <CodeGroup>
+        ```javascript Execute Agent
+        executeAgent("default_user");
+        ```
+    </CodeGroup>
+    </Step>
+</Steps>
+
+## Here's the Full Code
+
+<CodeGroup>
+    ```javascript Full Code
+import { openai } from "@ai-sdk/openai";
+import { VercelAIToolSet } from "composio-core";
+import dotenv from "dotenv";
+import { generateText } from "ai";
+
+dotenv.config();
+
+// Setup toolset
+const toolset = new VercelAIToolSet({
+  apiKey: process.env.COMPOSIO_API_KEY,
+});
+
+const appName = "googlesheets";
+
+async function setupUserConnectionIfNotExists(entityId) {
+  const entity = await toolset.client.getEntity(entityId);
+  const connection = await entity.getConnection(appName);
+
+  if (!connection) {
+    // Initiate a new connection if it doesn't exist
+    const newConnection = await entity.initiateConnection(appName);
+    console.log("Log in via: ", newConnection.redirectUrl);
+    return newConnection.waitUntilActive(60);
+  }
+
+  return connection;
+}
+
+async function executeAgent(entityName) {
+  // Setup entity and ensure connection
+  const entity = await toolset.client.getEntity(entityName);
+  await setupUserConnectionIfNotExists(entity.id);
+
+  // Retrieve tools for the specified app
+  const tools = await toolset.get_tools({ apps: ["exa","browserbase_tool","googlesheets"] }, entity.id);
+  
+  const businessName = 'Dan';
+  const leadDescription = 'tech bloggers like Packy Mccormick';
+  const spreadsheetid='14T4e0j1XsWjriQYeFMgkM2ihyvLAplPqB9q8hytytcw';
+  
+  // Generate text using the model and tools
+  const output = await generateText({
+    model: openai("gpt-4o"),
+    streamText: false,
+    tools: tools,
+    prompt: `
+            You are a lead research agent. Based on user input, find 5 relevant leads using available browser tools.
+            After finding the leads, create a Google Sheet with the details for the business: ${businessName}, 
+            lead description: ${leadDescription}, and spreadsheet ID: ${spreadsheetid}.
+            `, 
+    maxToolRoundtrips: 5,
+  });
+
+  console.log("🎉Output from agent: ", output.text);
+}
+
+executeAgent("default_user");
+    ```
+</CodeGroup>

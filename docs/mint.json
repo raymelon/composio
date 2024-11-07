@@ -199,24 +199,28 @@
         {
             "group": "Python Examples",
             "pages": [
-                "examples/combined/rag-agent-python",
-                "examples/combined/code-execution-agent-python",
-                "examples/combined/calendar-agent-python",
-                "examples/combined/newsletter-summarizer-python",
-                "examples/combined/research-agent-python",
-                "examples/combined/sql-agent-python"
-                
+                "examples/python/calendar-agent-python",
+                "examples/python/code-execution-agent-python",
+                "examples/python/newsletter-summarizer-python",
+                "examples/python/research-agent-python",
+                "examples/python/customer-support-agent-python",
+                "examples/python/lead_generator_agent_python",
+                "examples/python/lead_outreach_agent",
+                "examples/python/scheduling-agent-python"
             ]
         },
         {
             "group": "JavaScript Examples",
             "pages": [
-              "examples/combined/rag-agent-javascript",
-              "examples/combined/code-execution-agent-javascript",
-              "examples/combined/calendar-agent-javascript",
-              "examples/combined/newsletter-summarizer-javascript",
-              "examples/combined/research-agent-javascript",
-              "examples/combined/sql-agent-javascript"
+              "examples/javascript/rag-agent-javascript",
+              "examples/javascript/code-execution-agent-javascript",
+              "examples/javascript/calendar-agent-javascript",
+              "examples/javascript/newsletter-summarizer-javascript",
+              "examples/javascript/research-agent-javascript",
+              "examples/javascript/sql-agent-javascript",
+              "examples/javascript/lead-generator-agent-js",
+              "examples/javascript/lead-outreach-agent-js",
+              "examples/javascript/meeting-brief-agent-js"
             ]
         }
       ]
