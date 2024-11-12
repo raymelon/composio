@@ -9,7 +9,7 @@ toolset = ComposioToolSet()
 
 # Get and automatically register tools with babyagi
 tools = toolset.get_tools(
-    actions=[],
+    actions=[Action.SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL],
 )
 
 # Create and run the babyagi app
