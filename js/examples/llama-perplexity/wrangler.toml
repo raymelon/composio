@@ -1,0 +1,11 @@
+name = "ai-playground"
+main = "src/worker.js"
+node_compat = true
+compatibility_date = "2024-07-01"
+
+[ai]
+binding = "AI"
+
+[vars]
+COMPOSIO_API_KEY = "kj8gowob8yrxsrm0ga559c"
+GROQ_API_KEY = "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"
