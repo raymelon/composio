@@ -6,19 +6,19 @@ info:
   description: Composio API OpenAPI Spec.
   contact:
     name: soham
-    url: composio.dev
+    url: https://composio.dev
     email: hello@composio.dev
   license:
     url: 'https://composio.dev/terms-of-service'
     name: Proprietary
 servers:
-  - url: 'https://backend.composio.dev/api'
-    description: baseurl
+- url: 'https://backend.composio.dev/api'
+  description: baseurl
 paths:
   /v1/apps:
     get:
       tags:
-        - apps
+      - apps
       summary: List All Apps
       description: |-
         Retrieves a list of all available apps in the Composio platform.
@@ -65,30 +65,30 @@ paths:
                 List All Apps:
                   value:
                     items:
-                      - key: asana
-                        name: Asana
-                        description: 'Tool to help teams organize, track, and manage their work.'
-                        logo: 'https://assets.asana.biz/m/7342a96f034ee491/original/trademark-logo-lockup-horizontal.png'
-                        categories:
-                          - productivity
-                          - ticketing
-                        appId: 36a0705d-7e93-42ba-9288-436ee6201d7c
-                      - key: calendly
-                        name: Calendly
-                        description: 'A business communication platform used for teams to schedule, prepare and follow up on external meetings.'
-                        logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7f/Calendly_company_logo.png/330px-Calendly_company_logo.png'
-                        categories:
-                          - productivity
-                        appId: fb9b4a59-8eda-4032-84d7-638e1df4ffef
+                    - key: asana
+                      name: Asana
+                      description: 'Tool to help teams organize, track, and manage their work.'
+                      logo: 'https://assets.asana.biz/m/7342a96f034ee491/original/trademark-logo-lockup-horizontal.png'
+                      categories:
+                      - productivity
+                      - ticketing
+                      appId: 36a0705d-7e93-42ba-9288-436ee6201d7c
+                    - key: calendly
+                      name: Calendly
+                      description: 'A business communication platform used for teams to schedule, prepare and follow up on external meetings.'
+                      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7f/Calendly_company_logo.png/330px-Calendly_company_logo.png'
+                      categories:
+                      - productivity
+                      appId: fb9b4a59-8eda-4032-84d7-638e1df4ffef
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
   /v1/connectedAccounts:
     get:
       tags:
-        - connectedAccounts
+      - connectedAccounts
       summary: List All Connected Accounts
       description: |-
         Retrieves a list of all connected accounts in the Composio platform. 
@@ -98,31 +98,31 @@ paths:
         Use this endpoint to manage and monitor all active connections.  
       operationId: list-all-connections
       parameters:
-        - name: page
-          in: query
-          description: Page number to fetch
-          schema:
-            type: integer
-            examples:
-              - 1
+      - name: page
+        in: query
+        description: Page number to fetch
+        schema:
+          type: integer
           examples:
-            default:
-              value: 1
-        - name: pageSize
-          in: query
-          description: Page size to assume
-          schema:
-            type: integer
-            examples:
-              - 10
+          - 1
+        examples:
+          default:
+            value: 1
+      - name: pageSize
+        in: query
+        description: Page size to assume
+        schema:
+          type: integer
           examples:
-            default:
-              value: 10
-        - name: integrationId
-          in: query
-          description: Filter by using specific Integration
-          schema:
-            type: string
+          - 10
+        examples:
+          default:
+            value: 10
+      - name: integrationId
+        in: query
+        description: Filter by using specific Integration
+        schema:
+          type: string
       responses:
         '200':
           description: OK
@@ -155,32 +155,32 @@ paths:
                             owner:
                               description: 'The owner of the connection, which can be an object or a string.'
                               oneOf:
-                                - type: object
-                                  properties:
-                                    type:
-                                      type: string
-                                      description: 'The type of the owner (e.g., "user").'
-                                    user:
-                                      type: object
-                                      description: An object representing the user owner of the connection.
-                                      properties:
-                                        id:
-                                          type: string
-                                        name:
-                                          type: string
-                                        type:
-                                          type: string
-                                        object:
-                                          type: string
-                                          description: 'The object type of the user (e.g., "user").'
-                                        person:
-                                          type: object
-                                          properties:
-                                            email:
-                                              type: string
-                                        avatar_url:
-                                          type: string
-                                - type: string
+                              - type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    description: 'The type of the owner (e.g., "user").'
+                                  user:
+                                    type: object
+                                    description: An object representing the user owner of the connection.
+                                    properties:
+                                      id:
+                                        type: string
+                                      name:
+                                        type: string
+                                      type:
+                                        type: string
+                                      object:
+                                        type: string
+                                        description: 'The object type of the user (e.g., "user").'
+                                      person:
+                                        type: object
+                                        properties:
+                                          email:
+                                            type: string
+                                      avatar_url:
+                                        type: string
+                              - type: string
                             bot_id:
                               type: string
                               description: The ID of the bot associated with the connection.
@@ -227,9 +227,9 @@ paths:
                         status:
                           type: string
                           enum:
-                            - FAILED
-                            - INITIATED
-                            - ACTIVE
+                          - FAILED
+                          - INITIATED
+                          - ACTIVE
                           description: 'The status of the connection (e.g., "INITIATED", "SUCCESS").'
                         createdAt:
                           type: string
@@ -251,107 +251,107 @@ paths:
                 Get List of connections:
                   value:
                     items:
-                      - connectorId: c9da705a-774c-46e8-9b55-cc0eb0d85508
-                        connectionParams:
-                          base_url: 'https://api.github.com'
-                          client_id: 37beeaa7
-                          client_secret: 8c6d25f889a4e74
-                        id: 57fa7084-1188-4cbc-ae3b-e26c5bcccb7b
-                        status: INITIATED
-                        createdAt: '2024-03-11T07:41:34.827Z'
-                        updatedAt: '2024-03-11T07:41:34.827Z'
-                        appName: Github
-                        logo: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
-                      - connectorId: 31a23bf7-8df4-4e76-9860-
-                        connectionParams:
-                          owner:
-                            type: user
-                            user:
-                              id: 99b093ad-f0ff-42ef-be49-5c86a9ca9f52
-                              name: Utkarsh
-                              type: person
-                              object: user
-                              person:
-                                email: utkarsh@composio.dev
-                              avatar_url: s
-                          bot_id: 95e803ea-6677-4fd5-a881-9216e0ba8299
-                          base_url: 'https://api.notion.app'
-                          client_id: 85b2ddba
-                          request_id: a2b510af-acaf-4194-b1ff-ca0403d939e1
-                          token_type: bearer
-                          access_token: secret_H3AAr9E8rR8tA
-                          workspace_id: 35adec70-dbef-4f42-9
-                          client_secret: secret_K05OAKiG3MMe
-                          workspace_icon: 'null'
-                          workspace_name: Composio
-                          duplicated_template_id: 'null'
-                        id: 25613ab6-fb84-456d-bd14-8a748f2cf267
-                        status: ACTIVE
-                        createdAt: '2024-03-11T11:41:32.216Z'
-                        updatedAt: '2024-03-11T11:43:31.855Z'
-                        appName: Notion
-                        logo: 'https://i.imgur.com/98qPYXd.png'
-                      - connectorId: 31a23bf7-8df4-4e76-9860-143a7e3834a2
-                        connectionParams:
-                          base_url: 'https://api.notion.app'
-                          client_id: 85b2ddba-74a4-4aab-8b35-d
-                          client_secret: secret_K05OAKiG3Msyn2SChpm5
-                        id: 27dd1aa9-3267-48e0-8b65-a65c1699589a
-                        status: INITIATED
-                        createdAt: '2024-03-09T13:11:25.166Z'
-                        updatedAt: '2024-03-09T13:11:25.166Z'
-                        appName: Notion
-                        logo: 'https://i.imgur.com/98qPYXd.png'
-                      - connectorId: 31a23bf7-8df4-4e76-
-                        connectionParams:
-                          owner:
-                            type: user
-                            user:
-                              id: 99b093ad-f0ff-42ef-b
-                              name: Utkarsh
-                              type: person
-                              object: user
-                              person:
-                                email: utkarsh@composio.dev
-                              avatar_url: 'null'
-                          bot_id: 95e803ea-6677-4fd5-a881
-                          base_url: 'https://api.notion.app'
-                          client_id: 85b2ddba-74a4-4a
-                          request_id: a9979398-e15a-4d640-5162c9a3385b
-                          token_type: bearer
-                          access_token: secret_H3AAHjY96LPppWhyN4
-                          workspace_id: 35adec70-dbef-9214-62ac8cdc4d75
-                          client_secret: secret_G3MMecFqZVZ8syn2S
-                          workspace_icon: 'null'
-                          workspace_name: Composio
-                          duplicated_template_id: 'null'
-                        id: 6be44ecc-6a27-4675-a813-becf10465702
-                        status: ACTIVE
-                        createdAt: '2024-03-11T11:52:21.585Z'
-                        updatedAt: '2024-03-11T11:52:27.463Z'
-                        appName: Notion
-                        logo: 'https://i.imgur.com/98qPYXd.png'
-                      - connectorId: 31a23bf7-8df4-4e76-9860-
-                        connectionParams:
-                          base_url: 'https://api.notion.app'
-                          client_id: 85b2ddba-74a4-4aab-8b35-
-                          client_secret: secret_K05OAKiG3MMecFqZVZ8
-                        id: 9b81f3c9-54b0-4e45-a6a2-4
-                        status: INITIATED
-                        createdAt: '2024-03-11T07:39:05.438Z'
-                        updatedAt: '2024-03-11T07:39:05.438Z'
-                        appName: Notion
-                        logo: 'https://i.imgur.com/98qPYXd.png'
+                    - connectorId: c9da705a-774c-46e8-9b55-cc0eb0d85508
+                      connectionParams:
+                        base_url: 'https://api.github.com'
+                        client_id: 37beeaa7
+                        client_secret: 8c6d25f889a4e74
+                      id: 57fa7084-1188-4cbc-ae3b-e26c5bcccb7b
+                      status: INITIATED
+                      createdAt: '2024-03-11T07:41:34.827Z'
+                      updatedAt: '2024-03-11T07:41:34.827Z'
+                      appName: Github
+                      logo: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
+                    - connectorId: 31a23bf7-8df4-4e76-9860-
+                      connectionParams:
+                        owner:
+                          type: user
+                          user:
+                            id: 99b093ad-f0ff-42ef-be49-5c86a9ca9f52
+                            name: Utkarsh
+                            type: person
+                            object: user
+                            person:
+                              email: utkarsh@composio.dev
+                            avatar_url: s
+                        bot_id: 95e803ea-6677-4fd5-a881-9216e0ba8299
+                        base_url: 'https://api.notion.app'
+                        client_id: 85b2ddba
+                        request_id: a2b510af-acaf-4194-b1ff-ca0403d939e1
+                        token_type: bearer
+                        access_token: secret_H3AAr9E8rR8tA
+                        workspace_id: 35adec70-dbef-4f42-9
+                        client_secret: secret_K05OAKiG3MMe
+                        workspace_icon: 'null'
+                        workspace_name: Composio
+                        duplicated_template_id: 'null'
+                      id: 25613ab6-fb84-456d-bd14-8a748f2cf267
+                      status: ACTIVE
+                      createdAt: '2024-03-11T11:41:32.216Z'
+                      updatedAt: '2024-03-11T11:43:31.855Z'
+                      appName: Notion
+                      logo: 'https://i.imgur.com/98qPYXd.png'
+                    - connectorId: 31a23bf7-8df4-4e76-9860-143a7e3834a2
+                      connectionParams:
+                        base_url: 'https://api.notion.app'
+                        client_id: 85b2ddba-74a4-4aab-8b35-d
+                        client_secret: secret_K05OAKiG3Msyn2SChpm5
+                      id: 27dd1aa9-3267-48e0-8b65-a65c1699589a
+                      status: INITIATED
+                      createdAt: '2024-03-09T13:11:25.166Z'
+                      updatedAt: '2024-03-09T13:11:25.166Z'
+                      appName: Notion
+                      logo: 'https://i.imgur.com/98qPYXd.png'
+                    - connectorId: 31a23bf7-8df4-4e76-
+                      connectionParams:
+                        owner:
+                          type: user
+                          user:
+                            id: 99b093ad-f0ff-42ef-b
+                            name: Utkarsh
+                            type: person
+                            object: user
+                            person:
+                              email: utkarsh@composio.dev
+                            avatar_url: 'null'
+                        bot_id: 95e803ea-6677-4fd5-a881
+                        base_url: 'https://api.notion.app'
+                        client_id: 85b2ddba-74a4-4a
+                        request_id: a9979398-e15a-4d640-5162c9a3385b
+                        token_type: bearer
+                        access_token: secret_H3AAHjY96LPppWhyN4
+                        workspace_id: 35adec70-dbef-9214-62ac8cdc4d75
+                        client_secret: secret_G3MMecFqZVZ8syn2S
+                        workspace_icon: 'null'
+                        workspace_name: Composio
+                        duplicated_template_id: 'null'
+                      id: 6be44ecc-6a27-4675-a813-becf10465702
+                      status: ACTIVE
+                      createdAt: '2024-03-11T11:52:21.585Z'
+                      updatedAt: '2024-03-11T11:52:27.463Z'
+                      appName: Notion
+                      logo: 'https://i.imgur.com/98qPYXd.png'
+                    - connectorId: 31a23bf7-8df4-4e76-9860-
+                      connectionParams:
+                        base_url: 'https://api.notion.app'
+                        client_id: 85b2ddba-74a4-4aab-8b35-
+                        client_secret: secret_K05OAKiG3MMecFqZVZ8
+                      id: 9b81f3c9-54b0-4e45-a6a2-4
+                      status: INITIATED
+                      createdAt: '2024-03-11T07:39:05.438Z'
+                      updatedAt: '2024-03-11T07:39:05.438Z'
+                      appName: Notion
+                      logo: 'https://i.imgur.com/98qPYXd.png'
                     totalPages: 4
                     page: 1
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
     post:
       tags:
-        - connectedAccounts
+      - connectedAccounts
       summary: Connect an Account
       description: |-
         Connect an account
@@ -371,9 +371,9 @@ paths:
                 redirectUri:
                   type: string
                   examples:
-                    - 'https://google.com'
+                  - 'https://google.com'
               required:
-                - integrationId
+              - integrationId
               x-examples:
                 Example 1:
                   connectorId: 065bcbcf-e25b-4808-b4ad-13c16ad14824
@@ -388,9 +388,9 @@ paths:
                   connectionStatus:
                     type: string
                     enum:
-                      - SUCCESS
-                      - INITIATED
-                      - FAILED
+                    - SUCCESS
+                    - INITIATED
+                    - FAILED
                   connectionId:
                     type: string
                   redirectUrl:
@@ -407,31 +407,31 @@ paths:
                 "message": "Connector not found"
             }
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
   '/v1/connectedAccounts/{connectedAccountId}':
     get:
       tags:
-        - connectedAccounts
+      - connectedAccounts
       summary: Get a Connected Account
       description: |-
         Retrieves details of a specific account connected to the Composio platform by providing its connected account ID. 
         The response includes the integration ID, connection parameters (such as scope, base URL, client ID, token type, access token, etc.), connection ID, status, and creation/update timestamps.
       operationId: get-connected-account
       parameters:
-        - name: connectedAccountId
-          in: path
-          description: The unique identifier of the connection.
-          required: true
-          schema:
-            type: string
-            examples:
-              - 4d3e5e98-2fd0-4e7b-841a-a208c031b731
+      - name: connectedAccountId
+        in: path
+        description: The unique identifier of the connection.
+        required: true
+        schema:
+          type: string
           examples:
-            default:
-              value: 4d3e5e98-2fd0-4e7b-841a-a208c031b731
+          - 4d3e5e98-2fd0-4e7b-841a-a208c031b731
+        examples:
+          default:
+            value: 4d3e5e98-2fd0-4e7b-841a-a208c031b731
       responses:
         '200':
           description: OK
@@ -472,9 +472,9 @@ paths:
                   status:
                     type: string
                     enum:
-                      - ACTIVE
-                      - INITIATED
-                      - FAILED
+                    - ACTIVE
+                    - INITIATED
+                    - FAILED
                     description: ' The status of the connection (e.g., "SUCCESS").'
                   createdAt:
                     type: string
@@ -503,30 +503,30 @@ paths:
                 "message": "Connection not found or already deleted"
             }
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
     delete:
       tags:
-        - connectedAccounts
+      - connectedAccounts
       summary: Delete a Connected Account
       description: |-
         Remove a specific account from the Composio platform by providing its connection ID. Upon successful deletion, the response includes a status indicating the success of the operation.
         Use this endpoint to clean up unwanted connections for your end user and manage the connection lifecycle.
       operationId: delete-connection
       parameters:
-        - name: connectedAccountId
-          in: path
-          description: The unique identifier of the connection.
-          required: true
-          schema:
-            type: string
-            examples:
-              - 4d3e5e98-2fd0-4e7b-841a-a208c031b731
+      - name: connectedAccountId
+        in: path
+        description: The unique identifier of the connection.
+        required: true
+        schema:
+          type: string
           examples:
-            default:
-              value: 4d3e5e98-2fd0-4e7b-841a-a208c031b731
+          - 4d3e5e98-2fd0-4e7b-841a-a208c031b731
+        examples:
+          default:
+            value: 4d3e5e98-2fd0-4e7b-841a-a208c031b731
       responses:
         '200':
           description: |-
@@ -548,14 +548,14 @@ paths:
         '404':
           description: Not Found
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
   '/v1/integrations/{integrationId}':
     get:
       tags:
-        - integrations
+      - integrations
       summary: Get an Integration
       description: |-
         Retrieves details of a specific integration in the Composio platform by providing its unique identifier. The response includes the connector's name, authentication scheme, authentication configuration, creation and update timestamps, enabled status, associated app information, expected input fields, and logo.
@@ -568,17 +568,17 @@ paths:
         If the end-user selects this flow, collect the parameters and connect an account using it. 
       operationId: get-integration
       parameters:
-        - name: integrationId
-          in: path
-          description: The unique identifier of the integration.
-          required: true
-          schema:
-            type: string
-            examples:
-              - 065bcbcf-e25b-4808-b4ad-13c16ad14824
+      - name: integrationId
+        in: path
+        description: The unique identifier of the integration.
+        required: true
+        schema:
+          type: string
           examples:
-            default:
-              value: 065bcbcf-e25b-4808-b4ad-13c16ad14824
+          - 065bcbcf-e25b-4808-b4ad-13c16ad14824
+        examples:
+          default:
+            value: 065bcbcf-e25b-4808-b4ad-13c16ad14824
       responses:
         '200':
           description: OK
@@ -652,13 +652,13 @@ paths:
         '404':
           description: Not Found
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
     patch:
       tags:
-        - integrations
+      - integrations
       summary: Update an Integration
       description: |-
         Updates the settings of a specific integration in the Composio platform.
@@ -668,17 +668,17 @@ paths:
         Use this endpoint to manage the configuration and behavior of integrations in the Composio platform.
       operationId: update-integration
       parameters:
-        - name: integrationId
-          in: path
-          description: The unique identifier of the integration.
-          required: true
-          schema:
-            type: string
-            examples:
-              - 31a23bf7-8df4-4e76-9860-143a7e3834a2
+      - name: integrationId
+        in: path
+        description: The unique identifier of the integration.
+        required: true
+        schema:
+          type: string
           examples:
-            default:
-              value: 31a23bf7-8df4-4e76-9860-143a7e3834a2
+          - 31a23bf7-8df4-4e76-9860-143a7e3834a2
+        examples:
+          default:
+            value: 31a23bf7-8df4-4e76-9860-143a7e3834a2
       requestBody:
         content:
           application/json:
@@ -709,14 +709,14 @@ paths:
         '404':
           description: Not Found
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
   /v1/integrations:
     get:
       tags:
-        - integrations
+      - integrations
       summary: List All Integrations
       description: |-
         Retrieves a list of all integrations in the Composio platform. It supports pagination to handle large numbers of connectors. The response includes an array of connector objects, each containing information such as the connector's ID, name, authentication scheme, creation/update timestamps, enabled status, associated app information, and logo.
@@ -724,26 +724,26 @@ paths:
         This are the integration you can showcase to end user, and let them select which integration they want to connect an account with. 
       operationId: list-connectors
       parameters:
-        - name: page
-          in: query
-          description: Page number to fetch
-          schema:
-            type: integer
-            examples:
-              - 1
+      - name: page
+        in: query
+        description: Page number to fetch
+        schema:
+          type: integer
           examples:
-            default:
-              value: 1
-        - name: pageSize
-          in: query
-          description: Page Size to assume
-          schema:
-            type: integer
-            examples:
-              - 10
+          - 1
+        examples:
+          default:
+            value: 1
+      - name: pageSize
+        in: query
+        description: Page Size to assume
+        schema:
+          type: integer
           examples:
-            default:
-              value: 10
+          - 10
+        examples:
+          default:
+            value: 10
       responses:
         '200':
           description: OK
@@ -792,43 +792,43 @@ paths:
                 List all connectors:
                   value:
                     items:
-                      - id: 065bcbcf-e25b-4808-b4a6ad14824
-                        name: Github 1709897890337
-                        authScheme: OAUTH2
-                        createdAt: '2024-03-08T11:38:10.365Z'
-                        updatedAt: '2024-03-11T14:56:49.606Z'
-                        enabled: false
-                        appId: cde35d34-9fde-4e12-42ca665
-                        appName: github
-                        logo: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
-                      - id: 200f53ac-04f92-91f8-68b747daff6a
-                        name: Github - tomato_unique_hare
-                        authScheme: API_KEY
-                        createdAt: '2024-03-11T13:06:48.848Z'
-                        updatedAt: '2024-03-11T13:06:48.848Z'
-                        enabled: true
-                        appId: cde35d34-9fde-4ebe642ca665
-                        appName: github
-                        logo: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
-                      - id: 31a23bf7-8df4-4e7643a7e3834a2
-                        name: Notion 1709920326906
-                        authScheme: OAUTH2
-                        createdAt: '2024-03-08T17:52:07.518Z'
-                        updatedAt: '2024-03-11T14:46:22.604Z'
-                        enabled: false
-                        appId: db51f6f1-793f-446aa
-                        appName: notion
-                        logo: 'https://i.imgur.com/98qPYXd.png'
+                    - id: 065bcbcf-e25b-4808-b4a6ad14824
+                      name: Github 1709897890337
+                      authScheme: OAUTH2
+                      createdAt: '2024-03-08T11:38:10.365Z'
+                      updatedAt: '2024-03-11T14:56:49.606Z'
+                      enabled: false
+                      appId: cde35d34-9fde-4e12-42ca665
+                      appName: github
+                      logo: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
+                    - id: 200f53ac-04f92-91f8-68b747daff6a
+                      name: Github - tomato_unique_hare
+                      authScheme: API_KEY
+                      createdAt: '2024-03-11T13:06:48.848Z'
+                      updatedAt: '2024-03-11T13:06:48.848Z'
+                      enabled: true
+                      appId: cde35d34-9fde-4ebe642ca665
+                      appName: github
+                      logo: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
+                    - id: 31a23bf7-8df4-4e7643a7e3834a2
+                      name: Notion 1709920326906
+                      authScheme: OAUTH2
+                      createdAt: '2024-03-08T17:52:07.518Z'
+                      updatedAt: '2024-03-11T14:46:22.604Z'
+                      enabled: false
+                      appId: db51f6f1-793f-446aa
+                      appName: notion
+                      logo: 'https://i.imgur.com/98qPYXd.png'
                     totalPages: 2
                     page: 1
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
     post:
       tags:
-        - integrations
+      - integrations
       summary: Create a new integration
       description: 'This endpoint allows you to add a new integration by providing the necessary details such as the integration name, authentication scheme, associated app ID, and authentication configuration. Upon successful creation, the response includes the newly created connector object.'
       operationId: create-integration
@@ -844,8 +844,8 @@ paths:
                 authScheme:
                   type: string
                   enum:
-                    - OAUTH2
-                    - API_KEY
+                  - OAUTH2
+                  - API_KEY
                   description: 'The authentication scheme used by the connector (e.g., "OAUTH2", "API_KEY").'
                 appId:
                   type: string
@@ -949,14 +949,14 @@ paths:
         '400':
           description: Bad Request
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
   '/v1/actions/{actionName}':
     get:
       tags:
-        - actions
+      - actions
       summary: Get a Specific Action
       description: |-
         Retrieves details of a specific action in the Composio platform.
@@ -967,17 +967,17 @@ paths:
         You can then pass this to function calling or use LLM to fill in the parameters. 
       operationId: Get-action
       parameters:
-        - name: actionName
-          in: path
-          description: The unique identifier of the action.
-          required: true
-          schema:
-            type: string
-            examples:
-              - CreateSubtask
+      - name: actionName
+        in: path
+        description: The unique identifier of the action.
+        required: true
+        schema:
+          type: string
           examples:
-            default:
-              value: CreateSubtask
+          - CreateSubtask
+        examples:
+          default:
+            value: CreateSubtask
       responses:
         '200':
           description: OK
@@ -1095,9 +1095,9 @@ paths:
                           title: Notes
                           type: string
                       required:
-                        - workspace
-                        - task_id
-                        - name
+                      - workspace
+                      - task_id
+                      - name
                       title: CreateSubtaskRequest
                       type: object
                     response:
@@ -1107,7 +1107,7 @@ paths:
                           title: Id
                           type: string
                       required:
-                        - id
+                      - id
                       title: CreateSubtaskResponse
                       type: object
                     appId: 36a0705d-7e93-42ba-926ee6201d7c
@@ -1117,14 +1117,14 @@ paths:
         '404':
           description: Not Found
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
   /v1/actions:
     get:
       tags:
-        - actions
+      - actions
       summary: Get List of Actions
       description: |-
         Retrieves a list of all actions in the Composio platform.
@@ -1134,31 +1134,31 @@ paths:
         Use this endpoint to explore and discover the actions supported by the Composio platform and showcase them to end user. 
       operationId: Get-List-Actions
       parameters:
-        - name: appNames
-          in: query
-          description: 'Name of the app like "github", "linear"'
-          schema:
-            type: string
-        - name: useCase
-          in: query
-          description: Natural language usecase
-          schema:
-            type: string
-            examples:
-              - 'Star a Github Repo, create a new issue on linear'
-        - name: showEnabledOnly
-          in: query
-          description: Show actions enabled for the API Key
-          schema:
-            type: boolean
-        - name: limit
-          in: query
-          description: Limit of apis
-          schema:
-            type: string
-            default: '10'
-            examples:
-              - '5,10,20'
+      - name: appNames
+        in: query
+        description: 'Name of the app like "github", "linear"'
+        schema:
+          type: string
+      - name: useCase
+        in: query
+        description: Natural language usecase
+        schema:
+          type: string
+          examples:
+          - 'Star a Github Repo, create a new issue on linear'
+      - name: showEnabledOnly
+        in: query
+        description: Show actions enabled for the API Key
+        schema:
+          type: boolean
+      - name: limit
+        in: query
+        description: Limit of apis
+        schema:
+          type: string
+          default: '10'
+          examples:
+          - '5,10,20'
       requestBody:
         content: {}
       responses:
@@ -1241,14 +1241,14 @@ paths:
                     type: integer
                     description: The total number of pages available for the action list.
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
   '/v1/actions/{actionName}/execute':
     post:
       tags:
-        - actions
+      - actions
       summary: Execute action
       description: |-
         Executes a specific action in the Composio platform.
@@ -1260,17 +1260,17 @@ paths:
         Executed will indicate whether the action was successfully executed. 
       operationId: Execute-Action
       parameters:
-        - name: actionName
-          in: path
-          description: The name of the action to execute.
-          required: true
-          schema:
-            type: string
-            examples:
-              - CreateIssue
+      - name: actionName
+        in: path
+        description: The name of the action to execute.
+        required: true
+        schema:
+          type: string
           examples:
-            default:
-              value: CreateIssue
+          - CreateIssue
+        examples:
+          default:
+            value: CreateIssue
       requestBody:
         content:
           application/json:
@@ -1379,15 +1379,15 @@ paths:
         '404':
           description: Not Found
       security:
-        - authToken: []
+      - authToken: []
       servers:
-        - url: 'https://backend.composio.dev/api'
-          description: baseurl
+      - url: 'https://backend.composio.dev/api'
+        description: baseurl
 tags:
-  - name: actions
-  - name: apps
-  - name: connectedAccounts
-  - name: integrations
+- name: actions
+- name: apps
+- name: connectedAccounts
+- name: integrations
 components:
   securitySchemes:
     authToken:
@@ -1395,4 +1395,4 @@ components:
       name: X-API-Key
       in: header
 security:
-  - authToken: []
+- authToken: []
