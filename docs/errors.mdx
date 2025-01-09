@@ -5,8 +5,6 @@ description: "List of common errors and their solutions"
 ---
 ## Python SDK
 
-
-
 #### ApiKeyNotProvidedError
 Raised when no API key is provided when initializing the Composio client. Common causes include:
 - Missing API key in client initialization
@@ -23,16 +21,29 @@ Raised when an HTTP request to the Composio API fails. Common causes include:
 Check your network connection and verify the API endpoint is correct.
 
 #### EnumStringNotFoundError
+Occurs when trying to convert a string to an enum value that doesn't exist in the specified enum class (App and Action). Ensure you're using valid enum values.
 
 #### InvalidClassDefinition
+Occurs when the class definition is invalid or doesn't match the expected structure. Ensure you're using valid class definitions as defined in the SDK documentation.
 
 #### ExecutionFailed
+Occurs when the execution of an action fails. Common causes include:
+- Invalid input parameters
+- Incorrect action configuration
 
 #### InvalidRuntimeAction
+Occurs when the runtime action is invalid or doesn't match the expected structure. Ensure you're using valid runtime actions as defined in the SDK documentation.
 
 #### ComposioClientError
+Occurs when the Composio client encounters an error. Common causes include:
+- Invalid API key
+- Network connectivity issues
+- Server-side errors
 
 #### NoItemsFound
+Occurs when no items are found. Common causes include:
+- Invalid query parameters
+- No data found in the database
 
 ## JavaScript SDK
 
@@ -99,9 +110,15 @@ Raised when the server understands the request but refuses to authorize it. Comm
 Raised when an unexpected condition is encountered on the server. If you are facing this error, please reach out to us [Discord](https://discord.com/channels/1170785031560646836) 
 
 #### NotAcceptableError
-
+Occurs when the server cannot produce a response matching the client's accepted content types. Common causes include:
+- Unsupported media types
+- Invalid Accept headers
+- Content negotiation failures
 
 #### NotFoundError
+Occurs when the requested resource cannot be found on the server. Common causes include:
+- Invalid resource ID or path
+- Resource has been deleted
 
 #### UnauthorizedError
 Raised when authentication is required but has failed or not been provided. Common causes include:
@@ -114,10 +131,15 @@ Raised when a resource cannot be found, but similar alternatives exist. Common c
 - Misspelled app or action names
 
 #### ValidationError
-
+Occurs when the request fails validation checks. Common causes include:
+- Missing required fields
+- Invalid data types
+- Value constraints violations
 
 #### BACKEND::NOT_FOUND
-
+Occurs when the requested resource cannot be found on the server. Common causes include:
+- Invalid resource ID or path
+- Resource has been deleted
 
 #### BACKEND::RATE_LIMIT
 Raised when the number of requests exceeds the allowed limit. Common causes include:
@@ -137,7 +159,7 @@ Raised when authentication fails or credentials are missing. Common causes inclu
 - Missing API key
 
 #### BACKEND::SERVER_ERROR
-
+Occurs when an unexpected condition is encountered on the server. If you are facing this error, please reach out to us [Discord](https://discord.com/channels/1170785031560646836) 
 #### BACKEND::SERVER_UNAVAILABLE
 Raised when the server is temporarily unavailable. Common causes include:
 - Server maintenance
