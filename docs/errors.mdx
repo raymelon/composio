@@ -5,4 +5,215 @@ description: "List of common errors and their solutions"
 ---
 ## Python SDK
 
+
+
+#### ApiKeyNotProvidedError
+Raised when no API key is provided when initializing the Composio client. Common causes include:
+- Missing API key in client initialization
+- Environment variable not set properly
+
+If you don't already have Composio API Key, you can get it from [here](https://app.composio.dev/developers)
+
+#### HTTPError
+Raised when an HTTP request to the Composio API fails. Common causes include:
+- Invalid API endpoints
+- Network connectivity issues
+- Server-side errors
+
+Check your network connection and verify the API endpoint is correct.
+
+#### EnumStringNotFoundError
+
+#### InvalidClassDefinition
+
+#### ExecutionFailed
+
+#### InvalidRuntimeAction
+
+#### ComposioClientError
+
+#### NoItemsFound
+
 ## JavaScript SDK
+
+#### ActionNotFoundError
+Raised when attempting to get or execute an action that doesn't exist. Common causes include:
+- Incorrect action name or ID
+
+Checkout all the apps and corresponding actions [here](https://app.composio.dev/apps)
+
+#### AuthSchemaNotFoundError
+
+#### AppNotFoundError
+Raised when attempting to use an app/tool that doesn't exist. Common causes include:
+- Invalid app ID or name
+
+Checkout all the apps [here](https://app.composio.dev/apps)
+
+#### ProjectAlreadyExistsError
+Raised when attempting to create a project with a name that already exists. Common causes include:
+- Duplicate project name
+
+#### ApiKeyNotFoundError
+Raised when the provided API key cannot be found or has been deleted. Common causes include:
+- Deleted API key
+
+#### DeleteFailedError
+
+#### ConnectedAccountDisabledError
+Raised when attempting to use a connected account that has been disabled. 
+Enable the connected account from [UI](https://app.composio.dev/apps) or [API](https://docs.composio.dev/api-reference/connections/enable-connection)
+
+#### IntegrationNotFoundError
+Raised when attempting to access an integration that doesn't exist. Common causes include:
+- Invalid integration ID
+- Integration has been deleted
+
+#### FailedToAddIntegrationError
+Raised when attempting to add a new integration fails. Common causes include:
+
+#### DefaultConnectorNotFoundError
+Raised when the default connector for an integration cannot be found. Common causes include:
+
+#### TriggerEnableFailedError
+Raised when attempting to enable a trigger fails. Common causes include:
+
+#### BadRequestError
+Raised when the server cannot process the request due to client-side errors. Common causes include:
+
+
+#### RequestValidationError
+Raised when the request fails validation checks. Common causes include:
+- Missing required fields
+- Invalid data types
+- Value constraints violations
+- Schema validation failures
+
+#### ForbiddenError
+Raised when the server understands the request but refuses to authorize it. Common causes include:
+- Insufficient permissions
+- Resource access restrictions
+- Rate limit exceeded
+
+#### InternalServerError
+Raised when an unexpected condition is encountered on the server. If you are facing this error, please reach out to us [Discord](https://discord.com/channels/1170785031560646836) 
+
+#### NotAcceptableError
+
+
+#### NotFoundError
+
+#### UnauthorizedError
+Raised when authentication is required but has failed or not been provided. Common causes include:
+- Invalid API key
+- Expired access tokens
+- Integration with insufficient scopes
+
+#### NotFoundPlusSuggestionsError
+Raised when a resource cannot be found, but similar alternatives exist. Common causes include:
+- Misspelled app or action names
+
+#### ValidationError
+
+
+#### BACKEND::NOT_FOUND
+
+
+#### BACKEND::RATE_LIMIT
+Raised when the number of requests exceeds the allowed limit. Common causes include:
+- Too many requests in a short time period
+- Exceeded API quota for current plan, learn more about plans [here](https://composio.dev/pricing)
+
+#### BACKEND::BAD_REQUEST
+Raised when the server cannot process the request due to client error. Common causes include:
+- Malformed request syntax
+- Invalid request parameters
+- Missing required fields
+
+#### BACKEND::UNAUTHORIZED
+Raised when authentication fails or credentials are missing. Common causes include:
+- Integration with insufficient scopes
+- Expired access tokens
+- Missing API key
+
+#### BACKEND::SERVER_ERROR
+
+#### BACKEND::SERVER_UNAVAILABLE
+Raised when the server is temporarily unavailable. Common causes include:
+- Server maintenance
+- High server load
+- Infrastructure updates
+
+#### BACKEND::SERVER_UNREACHABLE
+Raised when the server cannot be reached. Common causes include:
+- Network connectivity issues
+- Server outage
+
+#### BACKEND::UNKNOWN
+Raised when an unspecified backend error occurs. Common causes include:
+- Unexpected error conditions
+- Unhandled exceptions
+
+If you are facing this error, please reach out to us [Discord](https://discord.com/channels/1170785031560646836) 
+
+## Common Errors
+
+#### COMMON::API_KEY_INVALID
+Raised when the provided API key is invalid or cannot be verified. Common causes include:
+- Incorrect API key format
+- Deleted API key
+
+#### COMMON::BASE_URL_NOT_REACHABLE
+Raised when the API base URL cannot be reached. Common causes include:
+- Network connectivity issues
+- Incorrect base URL configuration
+
+If you are facing this error, please reach out to us [Discord](https://discord.com/channels/1170785031560646836) 
+
+#### COMMON::ERROR_CODE_NOT_DEFINED
+Raised when an unknown error occurs that doesn't match any defined error codes. Common causes include:
+- New or undefined error conditions
+- System-level exceptions
+- Third-party service errors
+
+If you are facing this error, please reach out to us [Discord](https://discord.com/channels/1170785031560646836) 
+
+#### COMMON::SERVER_UNAVAILABLE
+Raised when the service is temporarily unavailable. Common causes include:
+- Scheduled maintenance
+- Service overload
+- Infrastructure issues
+
+If you are facing this error, please reach out to us [Discord](https://discord.com/channels/1170785031560646836) 
+
+#### COMMON::REQUEST_TIMEOUT
+Raised when a request takes too long to complete. Common causes include:
+- Slow network connection
+- Server processing delays
+- Resource constraints
+
+#### COMMON::REQUEST_ABORTED
+Raised when a request is cancelled before completion. Common causes include:
+- Client-side cancellation
+- Network interruption
+- Timeout conditions
+
+#### COMMON::INVALID_PARAMS_PASSED
+Raised when invalid parameters are provided in the request. Common causes include:
+- Incorrect parameter types
+- Missing required parameters
+- Invalid parameter values
+
+## SDK Errors
+
+#### SDK::NO_CONNECTED_ACCOUNT_FOUND
+Raised when attempting to perform an operation using an account that doesn't exist. Common causes include:
+- Missing account configuration
+- Deleted account
+
+#### SDK::FAILED_TO_INITIATE_CONNECTION
+Raised when the SDK fails to establish a connection. Common causes include:
+- Network connectivity issues
+- Invalid configuration
+- Authentication failures
+- Incorrect integration ID
