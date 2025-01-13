@@ -11,6 +11,10 @@ build:
 lint:
 	pnpm run lint
 
+.PHONY: format-code
+format-code:
+	pnpm format
+
 .PHONY: setup_cli
 setup_cli:
 	./setup_cli.sh
