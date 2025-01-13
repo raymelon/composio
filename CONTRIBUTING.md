@@ -38,9 +38,13 @@ If you want to contribute, start working through the codebase, navigate to the G
 
 ##  For a clean PR run checks in the following order before pushing the code on a PR
 
-- make clean
-- make format-code
-- make check-code
+#### Python 
+      make clean
+      make format-code
+      make check-code
+
+#### JavaScript/TypeScript
+      make format-code
 
 ## Further commands needed during development
 
